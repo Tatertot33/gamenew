@@ -10,15 +10,16 @@ enum ActionKind {
     Walking
 }
 enum SpriteKind {
-    Weapon
+    Weapon,
+    Trap
 }
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
-    }
-})
+function makeSprites() {
+    coolGuy = sprites.create(assets.image`swordGuy1`, SpriteKind.Player)
+    leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+    rightSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+    upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+    downSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+}
 function makeGuyAnimations () {
     swordGuyWalk = animation.createAnimation(ActionKind.SwordWalking, 200)
     swordGuyWalk.addAnimationFrame(assets.image`swordGuy1`)
@@ -109,9 +110,27 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         pause(150)
     }
 })
-function regMovement () {
-    controller.moveSprite(coolGuy, 50, 50)
-}
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (!(swinging)) {
+        animation.setAction(coolGuy, ActionKind.SwordWalking)
+    } else {
+        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    }
+})
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (!(swinging)) {
+        animation.setAction(coolGuy, ActionKind.SwordWalking)
+    } else {
+        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    }
+})
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (!(swinging)) {
+        animation.setAction(coolGuy, ActionKind.SwordWalking)
+    } else {
+        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    }
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (!(swinging)) {
         animation.setAction(coolGuy, ActionKind.SwordWalking)
@@ -131,7 +150,7 @@ function tilemapTransitions () {
         scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
             tiles.setCurrentTilemap(tilemap`ForestLevel5`)
             curTilemap = 5
-            coolGuy.setPosition(200, 10)
+            coolGuy.setPosition(73, 25)
         })
         scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile7`, function (sprite, location) {
             tiles.setCurrentTilemap(tilemap`ForestLevel1`)
@@ -174,22 +193,25 @@ function tilemapTransitions () {
                 coolGuy.setPosition(230, 135)
             }
         })
+    } else if (curTilemap == 4) {
+
+    } else if (curTilemap == 5) {
+        scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel2`)
+            curTilemap = 2
+            coolGuy.setPosition(73, 230)
+        })
     } else {
     	
     }
 }
-function makeSprites () {
-    coolGuy = sprites.create(assets.image`swordGuy1`, SpriteKind.Player)
-    leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-    rightSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-    upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-    downSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-}
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (guyVulnerable) {
+        info.player1.setLife(info.life() - 1)
+        guyVulnerable = false
+        timer.after(1000, function () {
+            guyVulnerable = true
+        })
     }
 })
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -204,83 +226,46 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSp
         otherSprite.destroy()
     }
 })
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
-    }
-})
-// swordUp = animation.createAnimation(ActionKind.SwingUp, 200)
-// swordUp.addAnimationFrame(assets.image`upSwing1`)
-// swordUp.addAnimationFrame(assets.image`upSwing2`)
-// swordUp.addAnimationFrame(assets.image`upSwing3`)
-// //animation.attachAnimation(upSword, swordUp)
-// swordDown = animation.createAnimation(ActionKind.SwingDown, 200)
-// swordDown.addAnimationFrame(assets.image`downSwing1`)
-// swordDown.addAnimationFrame(assets.image`downSwing2`)
-// swordDown.addAnimationFrame(assets.image`downSwing3`)
-// //animation.attachAnimation(downSword, swordDown)
-// swordLeft = animation.createAnimation(ActionKind.SwingLeft, 200)
-// swordLeft.addAnimationFrame(assets.image`leftSwing1`)
-// swordLeft.addAnimationFrame(assets.image`leftSwing2`)
-// swordLeft.addAnimationFrame(assets.image`leftSwing3`)
-// //animation.attachAnimation(leftSword, swordLeft)
-// swordRight = animation.createAnimation(ActionKind.SwingRight, 200)
-// swordRight.addAnimationFrame(assets.image`rightSwing1`)
-// swordRight.addAnimationFrame(assets.image`rightSwing2`)
-// swordRight.addAnimationFrame(assets.image`rightSwing3`)
-// //animation.attachAnimation(rightSword, swordRight)
-
+function regMovement() {
+    controller.moveSprite(coolGuy, 50, 50)
+}
 function slowMovement () {
     controller.moveSprite(coolGuy, 5, 5)
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (guyVulnerable) {
-        info.player1.setLife(info.life() - 1)
-        guyVulnerable = false
-        timer.after(1000, function () {
-            guyVulnerable = true
-        })
-    }
-})
 
-let moving = false
-let upSword: Sprite = null
-let downSword: Sprite = null
-let rightSword: Sprite = null
-let guyWalk: animation.Animation = null
-let swordGuyWalk: animation.Animation = null
-let swinging = false
-let enemyHealth: StatusBarSprite = null
-let enemyVulnerable = false
-let guyVulnerable = false
-let curTilemap = 0
-let swordUp = null
-let swordDown = null
-let swordLeft = null
-let swordRight = null
-curTilemap = 1
-guyVulnerable = true
-enemyVulnerable = true
-let leftSword: Sprite
 let coolGuy: Sprite
-enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+let upSword: Sprite
+let downSword: Sprite
+let rightSword: Sprite
+let leftSword: Sprite
+let guyWalk: animation.Animation
+let swordGuyWalk: animation.Animation
+let enemyBurger: Sprite
+let enemyHealth: StatusBarSprite
+let swinging = false
+let enemyVulnerable = true
+let guyVulnerable = true
+let moving = false
+let curTilemap = 1
+
 makeSprites()
 makeGuyAnimations()
-tilemapTransitions()
-controller.moveSprite(coolGuy, 75, 75)
-let enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+coolGuy.setPosition(20, 92)
+controller.moveSprite(coolGuy, 100, 100)
+
+enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+enemyBurger.follow(coolGuy, 10)
+enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
 enemyHealth.attachToSprite(enemyBurger)
 enemyHealth.setColor(2, 0)
 enemyHealth.max = 3
 enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+
 scene.setBackgroundImage(assets.image`forest1`)
-tiles.setCurrentTilemap(tilemap`ForestLevel1`)
 scene.cameraFollowSprite(coolGuy)
 info.setLife(3)
-coolGuy.setPosition(20, 92)
-enemyBurger.follow(coolGuy, 10)
+tiles.setCurrentTilemap(tilemap`ForestLevel1`)
+
 game.onUpdateInterval(1, function () {
     rightSword.setPosition(coolGuy.x + 10, coolGuy.y)
     upSword.setPosition(coolGuy.x, coolGuy.y - 10)
