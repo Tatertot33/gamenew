@@ -20,6 +20,41 @@ function makeSprites() {
     upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
     downSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
 }
+function makeEnemies() {
+    enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+    enemyBurger.follow(coolGuy, 10)
+    enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+    enemyHealth.attachToSprite(enemyBurger)
+    enemyHealth.setColor(2, 0)
+    enemyHealth.max = 3
+    enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+}
+function makeTraps() {
+    if(curTilemap == 5) {
+        trapping = true
+        let dartTrap1 = sprites.create(assets.image`blueDartTrap`, SpriteKind.Trap)
+        let dartTrap2 = sprites.create(assets.image`blueDartTrap`, SpriteKind.Trap)
+        let dartProj1: Sprite
+        let dartProj2: Sprite
+        tiles.placeOnTile(dartTrap1, tiles.getTileLocation(7, 0))
+        tiles.placeOnTile(dartTrap2, tiles.getTileLocation(11, 0))
+        for (let i = 0; i < 5; i++) {
+            timer.after(1000, function() {
+                dartProj1 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap1, 0, 100)
+                dartProj2 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap2, 0, 100)
+            })
+            
+        }
+
+        // while(curTilemap == 5) {
+        //     pause(1000)
+        //     let dartProj1 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap1, 0, 10)
+        //     let dartProj2 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap2, 0, 10)
+        // }
+        trapping = false
+    }
+    
+}
 function makeGuyAnimations () {
     swordGuyWalk = animation.createAnimation(ActionKind.SwordWalking, 200)
     swordGuyWalk.addAnimationFrame(assets.image`swordGuy1`)
@@ -140,70 +175,95 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 function tilemapTransitions () {
     if (curTilemap == 1) {
-        scene.setBackgroundImage(assets.image`forest1`)
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-            tiles.setCurrentTilemap(tilemap`ForestLevel2`)
-            curTilemap = 2
-            coolGuy.setPosition(192, 30)
-        })
-    } else if (curTilemap == 2) {
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-            tiles.setCurrentTilemap(tilemap`ForestLevel5`)
-            curTilemap = 5
-            coolGuy.setPosition(73, 25)
-        })
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile7`, function (sprite, location) {
-            tiles.setCurrentTilemap(tilemap`ForestLevel1`)
-            curTilemap = 1
-            coolGuy.setPosition(192, 225)
-        })
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath3`, function (sprite, location) {
-            if(location.row == 7) {
-                tiles.setCurrentTilemap(tilemap`ForestLevel3`)
-                curTilemap = 3
-                coolGuy.setPosition(30, 152)
-            }
-        })
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath6`, function (sprite, location) {
-            if (location.row == 8) {
-                tiles.setCurrentTilemap(tilemap`ForestLevel3`)
-                curTilemap = 3
-                coolGuy.setPosition(30, 152)
-            }
-        })
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath9`, function (sprite, location) {
-            if (location.row == 9) {
-                tiles.setCurrentTilemap(tilemap`ForestLevel3`)
-                curTilemap = 3
-                coolGuy.setPosition(30, 152)
-            }
-        })
-    } else if (curTilemap == 3) {
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass1`, function (sprite, location) {
-            if (location.col == 0) {
-                tiles.setCurrentTilemap(tilemap`ForestLevel2`)
-                curTilemap = 2
-                coolGuy.setPosition(230, 135)
-            }
-        })
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
-            if (location.col == 0) {
-                tiles.setCurrentTilemap(tilemap`ForestLevel2`)
-                curTilemap = 2
-                coolGuy.setPosition(230, 135)
-            }
-        })
-    } else if (curTilemap == 4) {
-
-    } else if (curTilemap == 5) {
-        scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-            tiles.setCurrentTilemap(tilemap`ForestLevel2`)
-            curTilemap = 2
-            coolGuy.setPosition(73, 230)
-        })
-    } else {
-    	
+        tileMap1Transitions()
+    } 
+    if (curTilemap == 2) {
+        tileMap2Transitions()
     }
+    if (curTilemap == 3) {
+        tileMap3Transitions()
+    }
+    if (curTilemap == 4) {
+        tileMap4Transitions()
+    }
+    if (curTilemap == 5) {
+        tileMap5Transitions()
+    }
+}
+function tileMap1Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+        tiles.setCurrentTilemap(tilemap`ForestLevel2`)
+        curTilemap = 2
+        coolGuy.setPosition(192, 30)
+        scene.setBackgroundImage(assets.image`greenBackground`)
+    })
+}
+function tileMap2Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+        tiles.setCurrentTilemap(tilemap`ForestLevel5`)
+        curTilemap = 5
+        coolGuy.setPosition(73, 25)
+        scene.setBackgroundImage(assets.image`blueBackground`)
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile7`, function (sprite, location) {
+        tiles.setCurrentTilemap(tilemap`ForestLevel1`)
+        curTilemap = 1
+        coolGuy.setPosition(192, 225)
+        scene.setBackgroundImage(assets.image`forest1`)
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath3`, function (sprite, location) {
+        if (location.row == 7) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel3`)
+            curTilemap = 3
+            coolGuy.setPosition(30, 152)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath6`, function (sprite, location) {
+        if (location.row == 8) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel3`)
+            curTilemap = 3
+            coolGuy.setPosition(30, 152)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath9`, function (sprite, location) {
+        if (location.row == 9) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel3`)
+            curTilemap = 3
+            coolGuy.setPosition(30, 152)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+        }
+    })
+} 
+function tileMap3Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass1`, function (sprite, location) {
+        if (location.col == 0) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel2`)
+            curTilemap = 2
+            coolGuy.setPosition(230, 135)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
+        if (location.col == 0) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel2`)
+            curTilemap = 2
+            coolGuy.setPosition(230, 135)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+        }
+    })
+}
+function tileMap4Transitions() {
+
+}
+function tileMap5Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+        tiles.setCurrentTilemap(tilemap`ForestLevel2`)
+        curTilemap = 2
+        coolGuy.setPosition(73, 230)
+        scene.setBackgroundImage(assets.image`greenBackground`)
+    })
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (guyVulnerable) {
@@ -213,6 +273,16 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
             guyVulnerable = true
         })
     }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Trap, function (sprite, otherSprite) {
+    if (guyVulnerable) {
+        info.player1.setLife(info.life() - 1)
+        guyVulnerable = false
+        timer.after(1000, function () {
+            guyVulnerable = true
+        })
+    }
+    otherSprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (enemyVulnerable) {
@@ -246,20 +316,15 @@ let swinging = false
 let enemyVulnerable = true
 let guyVulnerable = true
 let moving = false
+let trapping = false
 let curTilemap = 1
 
 makeSprites()
+makeEnemies()
+makeTraps()
 makeGuyAnimations()
 coolGuy.setPosition(20, 92)
 controller.moveSprite(coolGuy, 100, 100)
-
-enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
-enemyBurger.follow(coolGuy, 10)
-enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
-enemyHealth.attachToSprite(enemyBurger)
-enemyHealth.setColor(2, 0)
-enemyHealth.max = 3
-enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
 
 scene.setBackgroundImage(assets.image`forest1`)
 scene.cameraFollowSprite(coolGuy)
@@ -272,10 +337,13 @@ game.onUpdateInterval(1, function () {
     downSword.setPosition(coolGuy.x, coolGuy.y + 10)
     leftSword.setPosition(coolGuy.x - 10, coolGuy.y)
     moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
-    if (!(moving)) {
+    if (!moving) {
         animation.stopAnimation(animation.AnimationTypes.All, coolGuy)
     }
 })
 game.onUpdateInterval(500, function() {
     tilemapTransitions()
+    if (!trapping) {
+        makeTraps()
+    }
 })
