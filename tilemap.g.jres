@@ -220,6 +220,36 @@
         "tilemapTile": true,
         "displayName": "treeFallenTile6"
     },
+    "tile37": {
+        "data": "hwQQABAAAACIqqqqqqqqqoiqqqqqqqqqiKqqqqqqqqqIqqqqqqqqqoiqqqqqqqqqiKqqqqqqqqqIqqqqqqqqqoiqqqqqqqqqiKqqqqqqqqqIqqqqqqqqqoiqqqqqqqqqiKqqqqqqqqqIqqqqqqqqqoiqqqqqqqqqiKqqqqqqqqqIqqqqqqqqqg==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "purpleWaterTile"
+    },
+    "tile38": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile10"
+    },
+    "tile39": {
+        "data": "hwQQABAAAAB2d3d3d2eI+HZ3d3d2d+judnd3d2dmZu52d3d3d2fm7nZ3d3d3ZujuZnd3d2dmhv5mdnd3dndmhmZ3d3d3Z2budnd3d3dmiOh2d3d3Z2aGiHZ3d3d3Zmbudnd3d3dnhu52d3d3ZoaI6GZ3d3d3ZojuZnZ3d2dm5u5md3d3d2aG/w==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "treeMiddleTile"
+    },
+    "tile40": {
+        "data": "hwQQABAAAAAAYGaIZoiI+GB2d3aHZujuYHdnd2aGZu52d3d3d2fm7nZ3d3d3ZujuZnd3d2dmhv5mdnd3dndmhmZ3d3d3Z2budnd3d3dmiOh2d3d3Z2aGiHZ3d3d3Zmbudnd3d3dnhu52d3d3ZoaI6GZ3d3d3ZojuZnZ3d2dm5u5md3d3d2aG/w==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "treeLeftTile"
+    },
+    "tile41": {
+        "data": "hwQQABAAAACqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqg==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "purpleTile"
+    },
     "level1": {
         "id": "level1",
         "mimeType": "application/mkcd-tilemap",
@@ -323,7 +353,7 @@
     "level2": {
         "id": "level2",
         "mimeType": "application/mkcd-tilemap",
-        "data": "MTAxMDAwMTAwMDBkMGQxMTAxMDEwMTEzMGExMjBiMGIwYTBiMGIwYjBiMDcwZDBmMDUwMzBhMGMwYjBiMGIwYjBiMGIwYjBiMGIwZDA3MGYwNTA0MDMwNTA1MGEwNDBhMDUwNTA1MDUwYTA3MDcwZjA1MDQwNTBhMDUwNTA0MDUwNTA0MDMwNTA1MDkwNzBmMDUwYTA1MDUwNTA1MDUwNTA1MGEwNTBhMDUwNzA5MTAwNjA2MDYwNjA2MDYwNjA2MDYwMjA1MDUwMzAzMDUwMzA3MDMwMzA1MGEwNTA1MDUwNTA1MDUwNTA0MDUwMzE2MTQxODAzMDUwNTBhMDMwYTA1MDQwNDA1MDUwYTA0MTcxNTE5MDUwYTA1MGEwNTA1MGEwNTA1MDUwYTA1MGEwNTA3MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDMwNTA1MDgwOTA3MDcwOTA5MDcwNzA5MDkwNzA3MDkwYTA1MDUwNTBhMDUwNTA1MDMwYTAzMDQwYTA3MDkwNzA1MDQwNDA1MDUwNTA0MDUwYTA1MDQwNDA1MDcwNzA3MGEwNTA1MGEwNTA1MDUwYTA1MDUwMzAzMGEwZDA3MGQwYjBiMGIwYjBiMGIwYjBiMGIwZTA1MGEwNDA3MGQwNzBiMGIwYjBiMGIwYjBhMGIwYTBlMDUwNTA1MDcwZDBkMjIwMjAwMDIyMjAyMjIyMjIyMDIwMDAyMjIwMjIyMjIyMjAyMDAwMDAwMDAwMDAwMjIwMjAwMDAwMDAwMDAwMDAyMDIwMDAwMDAwMDAwMDAyMjIyMjIyMjIyMjIwMjAwMDAyMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIwMDAwMDAwMDAwMDAwMDAyMDIyMjIyMjIyMjIyMjAwMjAyMjIyMjIyMjIyMjAwMDAwMDAwMDAwMDAyMDAyMDAwMDAwMDAwMDAwMjAyMDAwMDAwMDAwMDAwMDIwMDIyMjIyMjIyMjIyMDAyMDIyMjIyMjIyMjAyMDAwMjAyMg==",
+        "data": "MTAxMDAwMTAwMDBkMGQxMTAxMDEwMTBjMGIwYjBiMGIwYjBiMGIwYjBiMDcwZDBmMDUwMzBhMTIwYTBjMGIwZTBhMGMwYjBiMGIwZDA3MGYwNTA0MDMwNTA1MGEwNDBhMDUwNTA1MDUwYzA3MDcwZjA1MDQwNTBhMDUwNTA0MDUwNTA0MDMwNTBjMDkwNzBmMDUwYTA1MDUwNTA1MDUwNTA1MGEwNTBhMGMwNzA5MTAwNjA2MDYwNjA2MDYwNjA2MDYwMjA1MDUwYzBlMDUwMzA3MDMwMzA1MGEwNTA1MDUwNTA1MDUwNTBjMGEwMzE1MTMxNzAzMDUwNTBhMDMwYTA1MDQwNDA1MGMwZTA0MTYxNDE4MDUwYTA1MGEwNTA1MGEwNTA1MDUwYzBlMGEwNTA3MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MGUwNTA1MDgwOTA3MDcwOTA3MDcwNzA5MDkwNzA3MDkwZTA1MDUwNTBhMDUwNTA1MDMwYTAzMDQwYTA3MDkwNzBlMDQwNDA1MDUwNTA0MDUwYTA1MDQwNDA1MDcwNzA3MGUwNTA1MGEwNTA1MDUwYTA1MDUwMzAzMGEwZDA3MGQwYjBiMGIwYjBiMGUwYTEyMGExMjA1MGEwNDA3MGQwNzBiMGIwYjBiMGIwYjBiMGIwYjBlMDUwNTA1MDcwZDBkMjIwMjAwMDIyMjAyMjIyMjIyMDIwMDIyMjIyMjIyMjIyMjAyMDAwMDAwMDAwMDIwMjIwMjAwMDAwMDAwMDAyMDAyMDIwMDAwMDAwMDAwMjAyMjIyMjIyMjIyMjIwMjIwMDIyMDAwMDAwMDAwMDAyMDAyMDAwMDAwMDAwMDAwMjAwMjIwMDAwMDAwMDAwMDIwMDIyMDIyMjIyMjIyMjIyMjAyMjAyMjIyMjIyMjIyMjAwMjAwMDAwMDAwMDAyMDAyMDIwMDAwMDAwMDAwMjAyMDAyMDAwMDAwMDAwMDIwMDIyMjIyMjIyMjIyMDAyMDIyMjIyMjIyMjAyMDAwMjAyMg==",
         "tileset": [
             "myTiles.transparency16",
             "myTiles.tile19",
@@ -343,7 +373,6 @@
             "myTiles.tile27",
             "myTiles.tile28",
             "myTiles.tile29",
-            "sprites.builtin.forestTiles21",
             "sprites.builtin.forestTiles4",
             "myTiles.tile31",
             "myTiles.tile32",

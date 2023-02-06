@@ -11,8 +11,10 @@ enum ActionKind {
 }
 enum SpriteKind {
     Weapon,
-    Trap
+    Trap,
+    TrapProjectile
 }
+
 function makeSprites() {
     coolGuy = sprites.create(assets.image`swordGuy1`, SpriteKind.Player)
     leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
@@ -20,42 +22,111 @@ function makeSprites() {
     upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
     downSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
 }
-function makeEnemies() {
-    enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
-    enemyBurger.follow(coolGuy, 10)
-    enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
-    enemyHealth.attachToSprite(enemyBurger)
-    enemyHealth.setColor(2, 0)
-    enemyHealth.max = 3
-    enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
-}
-function makeTraps() {
-    if(curTilemap == 5) {
-        trapping = true
-        let dartTrap1 = sprites.create(assets.image`blueDartTrap`, SpriteKind.Trap)
-        let dartTrap2 = sprites.create(assets.image`blueDartTrap`, SpriteKind.Trap)
-        let dartProj1: Sprite
-        let dartProj2: Sprite
-        tiles.placeOnTile(dartTrap1, tiles.getTileLocation(7, 0))
-        tiles.placeOnTile(dartTrap2, tiles.getTileLocation(11, 0))
-        for (let i = 0; i < 5; i++) {
-            timer.after(1000, function() {
-                dartProj1 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap1, 0, 100)
-                dartProj2 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap2, 0, 100)
-            })
-            
+function makeEnemy() {
+    if (curTilemap == 1) {
+        if (enemiesLeft1) {
+            numEnemies = 1
+            enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+            enemyBurger.setPosition(150, 150)
+            enemyBurger.follow(coolGuy, 10)
+            enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth.attachToSprite(enemyBurger)
+            enemyHealth.setColor(2, 0)
+            enemyHealth.max = 3
+            enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
-
-        // while(curTilemap == 5) {
-        //     pause(1000)
-        //     let dartProj1 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap1, 0, 10)
-        //     let dartProj2 = sprites.createProjectileFromSprite(assets.image`dart`, dartTrap2, 0, 10)
-        // }
-        trapping = false
     }
-    
 }
-function makeGuyAnimations () {
+function checkEnemiesAlive() {
+    if (numEnemies == enemiesSlain && enemiesSlain != 0) {
+        if (curTilemap == 1) {
+            enemiesLeft1 = false
+        }
+        if (curTilemap == 2) {
+            enemiesLeft2 = false
+        }
+        if (curTilemap == 3) {
+            enemiesLeft3 = false
+        }
+        if (curTilemap == 4) {
+            enemiesLeft4 = false
+        }
+        if (curTilemap == 5) {
+            enemiesLeft5 = false
+        }
+    }
+}
+sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
+    enemiesSlain += 1
+})
+function makeTraps(interval: Number) {
+    if (curTilemap == 5 && !trapping) {
+        if (firstCycle) {
+            sawTrap1 = sprites.create(assets.image`blueDownDartTrap`, SpriteKind.Trap)
+            sawTrap2 = sprites.create(assets.image`blueDownDartTrap`, SpriteKind.Trap)
+            sawTrap3 = sprites.create(assets.image`purpleDownDartTrap`, SpriteKind.Trap)
+            sawTrap4 = sprites.create(assets.image`blueRightDartTrap`, SpriteKind.Trap)
+            sawTrap5 = sprites.create(assets.image`blueUpDartTrap`, SpriteKind.Trap)
+            sawTrap6 = sprites.create(assets.image`blueUpDartTrap`, SpriteKind.Trap)
+            tiles.placeOnTile(sawTrap1, tiles.getTileLocation(7, 1))
+            tiles.placeOnTile(sawTrap2, tiles.getTileLocation(11, 1))
+            tiles.placeOnTile(sawTrap3, tiles.getTileLocation(1, 4))
+            tiles.placeOnTile(sawTrap4, tiles.getTileLocation(0, 7))
+            tiles.placeOnTile(sawTrap5, tiles.getTileLocation(6, 14))
+            tiles.placeOnTile(sawTrap6, tiles.getTileLocation(8, 14))
+            firstCycle = false
+        }
+        if (interval == 1000) {
+            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap1, 0, 100)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+            sawProj.setKind(SpriteKind.TrapProjectile)
+
+            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap2, 0, 100)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+            sawProj.setKind(SpriteKind.TrapProjectile)
+
+            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap3, 0, 50)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+            sawProj.setKind(SpriteKind.TrapProjectile)
+
+            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap5, 0, -50)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+            sawProj.setKind(SpriteKind.TrapProjectile)
+
+            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap6, 0, -50)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+            sawProj.setKind(SpriteKind.TrapProjectile)
+
+        }
+        if (interval == 2000) {
+            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap4, 75, 0)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+            sawProj.setKind(SpriteKind.TrapProjectile)
+        }
+        scene.onOverlapTile(SpriteKind.TrapProjectile, assets.tile`treeLeftTile`, function (sprite, location) {
+            sprite.destroy()
+        })
+        scene.onOverlapTile(SpriteKind.TrapProjectile, assets.tile`treeMiddleTile`, function (sprite, location) {
+            sprite.destroy()
+        })
+        scene.onOverlapTile(SpriteKind.TrapProjectile, assets.tile`purpleWaterTile`, function (sprite, location) {
+            sprite.destroy()
+        })
+    }
+}
+function makeGuyAnimations() {
     swordGuyWalk = animation.createAnimation(ActionKind.SwordWalking, 200)
     swordGuyWalk.addAnimationFrame(assets.image`swordGuy1`)
     swordGuyWalk.addAnimationFrame(assets.image`swordGuy2`)
@@ -82,10 +153,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             animation.runImageAnimation(
             leftSword,
             assets.animation`SliceLeft`,
-            75,
+            50,
             false
             )
-            pause(250)
+            pause(200)
             leftSword.destroy()
             leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
             animation.setAction(coolGuy, ActionKind.SwordWalking)
@@ -97,11 +168,11 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             animation.setAction(coolGuy, ActionKind.NormalWalking)
             animation.runImageAnimation(
             rightSword,
-            assets.animation`SliceRight0`,
-            100,
+            assets.animation`SliceRight`,
+            50,
             false
             )
-            pause(350)
+            pause(200)
             rightSword.destroy()
             rightSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
             animation.setAction(coolGuy, ActionKind.SwordWalking)
@@ -113,11 +184,11 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             animation.setAction(coolGuy, ActionKind.NormalWalking)
             animation.runImageAnimation(
             downSword,
-            assets.animation`SliceDown0`,
-            100,
+            assets.animation`SliceDown`,
+            50,
             false
             )
-            pause(350)
+            pause(200)
             downSword.destroy()
             downSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
             animation.setAction(coolGuy, ActionKind.SwordWalking)
@@ -129,11 +200,11 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             animation.setAction(coolGuy, ActionKind.NormalWalking)
             animation.runImageAnimation(
             upSword,
-            assets.animation`SliceUp0`,
-            100,
+            assets.animation`SliceUp`,
+            50,
             false
             )
-            pause(350)
+            pause(200)
             upSword.destroy()
             upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
             animation.setAction(coolGuy, ActionKind.SwordWalking)
@@ -159,13 +230,6 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
         animation.setAction(coolGuy, ActionKind.NormalWalking)
     }
 })
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
-    }
-})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (!(swinging)) {
         animation.setAction(coolGuy, ActionKind.SwordWalking)
@@ -173,10 +237,17 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
         animation.setAction(coolGuy, ActionKind.NormalWalking)
     }
 })
-function tilemapTransitions () {
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (!(swinging)) {
+        animation.setAction(coolGuy, ActionKind.SwordWalking)
+    } else {
+        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    }
+})
+function tilemapTransitions() {
     if (curTilemap == 1) {
         tileMap1Transitions()
-    } 
+    }
     if (curTilemap == 2) {
         tileMap2Transitions()
     }
@@ -190,12 +261,15 @@ function tilemapTransitions () {
         tileMap5Transitions()
     }
 }
-function tileMap1Transitions() {
+function tileMap1Transitions () {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
         tiles.setCurrentTilemap(tilemap`ForestLevel2`)
         curTilemap = 2
         coolGuy.setPosition(192, 30)
         scene.setBackgroundImage(assets.image`greenBackground`)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+        enemiesSlain = 0
+        makeEnemy()
     })
 }
 function tileMap2Transitions() {
@@ -204,12 +278,19 @@ function tileMap2Transitions() {
         curTilemap = 5
         coolGuy.setPosition(73, 25)
         scene.setBackgroundImage(assets.image`blueBackground`)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+        firstCycle = true
+        enemiesSlain = 0
+        makeEnemy()
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile7`, function (sprite, location) {
         tiles.setCurrentTilemap(tilemap`ForestLevel1`)
         curTilemap = 1
         coolGuy.setPosition(192, 225)
         scene.setBackgroundImage(assets.image`forest1`)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+        enemiesSlain = 0
+        makeEnemy()
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath3`, function (sprite, location) {
         if (location.row == 7) {
@@ -217,6 +298,9 @@ function tileMap2Transitions() {
             curTilemap = 3
             coolGuy.setPosition(30, 152)
             scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath6`, function (sprite, location) {
@@ -225,6 +309,9 @@ function tileMap2Transitions() {
             curTilemap = 3
             coolGuy.setPosition(30, 152)
             scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath9`, function (sprite, location) {
@@ -233,9 +320,12 @@ function tileMap2Transitions() {
             curTilemap = 3
             coolGuy.setPosition(30, 152)
             scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
         }
     })
-} 
+}
 function tileMap3Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass1`, function (sprite, location) {
         if (location.col == 0) {
@@ -243,6 +333,9 @@ function tileMap3Transitions() {
             curTilemap = 2
             coolGuy.setPosition(230, 135)
             scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
@@ -251,6 +344,9 @@ function tileMap3Transitions() {
             curTilemap = 2
             coolGuy.setPosition(230, 135)
             scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
         }
     })
 }
@@ -263,27 +359,14 @@ function tileMap5Transitions() {
         curTilemap = 2
         coolGuy.setPosition(73, 230)
         scene.setBackgroundImage(assets.image`greenBackground`)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+        sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
+        enemiesSlain = 0
+        makeEnemy()
     })
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (guyVulnerable) {
-        info.player1.setLife(info.life() - 1)
-        guyVulnerable = false
-        timer.after(1000, function () {
-            guyVulnerable = true
-        })
-    }
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Trap, function (sprite, otherSprite) {
-    if (guyVulnerable) {
-        info.player1.setLife(info.life() - 1)
-        guyVulnerable = false
-        timer.after(1000, function () {
-            guyVulnerable = true
-        })
-    }
-    otherSprite.destroy()
-})
+
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (enemyVulnerable) {
         enemyHealth.value += -1
@@ -296,10 +379,29 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSp
         otherSprite.destroy()
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.TrapProjectile, function (sprite, otherSprite) {
+    if (guyVulnerable) {
+        info.player1.setLife(info.life() - 1)
+        guyVulnerable = false
+        timer.after(1000, function () {
+            guyVulnerable = true
+        })
+    }
+    otherSprite.destroy()
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (guyVulnerable) {
+        info.player1.setLife(info.life() - 1)
+        guyVulnerable = false
+        timer.after(1000, function () {
+            guyVulnerable = true
+        })
+    }
+})
 function regMovement() {
     controller.moveSprite(coolGuy, 50, 50)
 }
-function slowMovement () {
+function slowMovement() {
     controller.moveSprite(coolGuy, 5, 5)
 }
 
@@ -308,42 +410,59 @@ let upSword: Sprite
 let downSword: Sprite
 let rightSword: Sprite
 let leftSword: Sprite
+let sawTrap1: Sprite
+let sawTrap2: Sprite
+let sawTrap3: Sprite
+let sawTrap4: Sprite
+let sawTrap5: Sprite
+let sawTrap6: Sprite
+let sawProj: Sprite
 let guyWalk: animation.Animation
 let swordGuyWalk: animation.Animation
 let enemyBurger: Sprite
 let enemyHealth: StatusBarSprite
-let swinging = false
-let enemyVulnerable = true
 let guyVulnerable = true
+let enemyVulnerable = true
 let moving = false
+let swinging = false
 let trapping = false
+let firstCycle = true
+let enemiesLeft1 = true
+let enemiesLeft2 = true
+let enemiesLeft3 = true
+let enemiesLeft4 = true
+let enemiesLeft5 = true
 let curTilemap = 1
+let enemiesSlain = 0
+let numEnemies: Number
 
 makeSprites()
-makeEnemies()
-makeTraps()
+makeEnemy()
 makeGuyAnimations()
 coolGuy.setPosition(20, 92)
 controller.moveSprite(coolGuy, 100, 100)
-
 scene.setBackgroundImage(assets.image`forest1`)
 scene.cameraFollowSprite(coolGuy)
 info.setLife(3)
 tiles.setCurrentTilemap(tilemap`ForestLevel1`)
-
-game.onUpdateInterval(1, function () {
+game.onUpdate(function () {
     rightSword.setPosition(coolGuy.x + 10, coolGuy.y)
     upSword.setPosition(coolGuy.x, coolGuy.y - 10)
     downSword.setPosition(coolGuy.x, coolGuy.y + 10)
     leftSword.setPosition(coolGuy.x - 10, coolGuy.y)
     moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
-    if (!moving) {
+    if (!(moving)) {
         animation.stopAnimation(animation.AnimationTypes.All, coolGuy)
     }
-})
-game.onUpdateInterval(500, function() {
-    tilemapTransitions()
-    if (!trapping) {
-        makeTraps()
+    if (firstCycle) {
+        makeTraps(1)
     }
+    checkEnemiesAlive()
+})
+game.onUpdateInterval(2000, function () {
+    makeTraps(2000)
+})
+game.onUpdateInterval(1000, function () {
+    tilemapTransitions()
+    makeTraps(1000)
 })
