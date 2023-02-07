@@ -77,44 +77,47 @@ function makeTraps(interval: Number) {
             firstCycle = false
         }
         if (interval == 1000) {
-            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap1, 0, 100)
-            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
-            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
-            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
-            sawProj.setKind(SpriteKind.TrapProjectile)
+            if(coolGuy.y < 100) {
+                sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap1, 0, 100)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+                sawProj.setKind(SpriteKind.TrapProjectile)
 
-            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap2, 0, 100)
-            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
-            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
-            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
-            sawProj.setKind(SpriteKind.TrapProjectile)
+                sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap2, 0, 100)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+                sawProj.setKind(SpriteKind.TrapProjectile)
+            } else if(coolGuy.y > 100 && coolGuy.y < 175) {
+                sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap3, 0, 50)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+                sawProj.setKind(SpriteKind.TrapProjectile)
+            } else {
+                sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap5, 0, -50)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+                sawProj.setKind(SpriteKind.TrapProjectile)
 
-            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap3, 0, 50)
-            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
-            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
-            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
-            sawProj.setKind(SpriteKind.TrapProjectile)
-
-            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap5, 0, -50)
-            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
-            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
-            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
-            sawProj.setKind(SpriteKind.TrapProjectile)
-
-            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap6, 0, -50)
-            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
-            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
-            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
-            sawProj.setKind(SpriteKind.TrapProjectile)
+                sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap6, 0, -50)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+                sawProj.setKind(SpriteKind.TrapProjectile)
+            }
+            if (interval == 2000 && coolGuy.y > 100 && coolGuy.y < 175) {
+                sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap4, 75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, false)
+                sawProj.setKind(SpriteKind.TrapProjectile)
+            }
 
         }
-        if (interval == 2000) {
-            sawProj = sprites.createProjectileFromSprite(assets.image`sawblade1`, sawTrap4, 75, 0)
-            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
-            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
-            sawProj.setFlag(SpriteFlag.AutoDestroy, false)
-            sawProj.setKind(SpriteKind.TrapProjectile)
-        }
+        
         scene.onOverlapTile(SpriteKind.TrapProjectile, assets.tile`treeLeftTile`, function (sprite, location) {
             sprite.destroy()
         })
@@ -435,6 +438,7 @@ let enemiesLeft5 = true
 let curTilemap = 1
 let enemiesSlain = 0
 let numEnemies: Number
+let count = 0
 
 makeSprites()
 makeEnemy()
@@ -459,10 +463,15 @@ game.onUpdate(function () {
     }
     checkEnemiesAlive()
 })
-game.onUpdateInterval(2000, function () {
-    makeTraps(2000)
-})
 game.onUpdateInterval(1000, function () {
     tilemapTransitions()
     makeTraps(1000)
+    if (count == 1) {
+        makeTraps(2000)
+        count = 0
+    } else {
+        count++
+    }
+
 })
+
