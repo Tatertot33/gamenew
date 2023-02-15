@@ -219,6 +219,16 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "purpleDownDartTrap"
     },
+    "image44": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAzM7MAAAAAMDs7swAAAAAwP7+zgAAAADg7u/uAAAAAMD+/s4AAAAAwOzuzAAAAADAzM7MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "box"
+    },
+    "image45": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg7u7uAAAAAODOzOwAAAAA4OzM7AAAAADgzM7sAAAAAODM7OwAAAAA4MzM7gAAAADg7u7uAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "woodBox"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",
