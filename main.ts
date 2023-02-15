@@ -285,37 +285,44 @@ function tilemapTransitions() {
 }
 function tileMap1Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-        tiles.setCurrentTilemap(tilemap`ForestLevel2`)
-        curTilemap = 2
-        coolGuy.setPosition(192, 30)
-        scene.setBackgroundImage(assets.image`greenBackground`)
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-        enemiesSlain = 0
-        makeEnemy()
+        if(curTilemap == 1) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel2`)
+            curTilemap = 2
+            coolGuy.setPosition(192, 30)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
+        }
     })
 }
 function tileMap2Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-        tiles.setCurrentTilemap(tilemap`ForestLevel5`)
-        curTilemap = 5
-        coolGuy.setPosition(73, 25)
-        scene.setBackgroundImage(assets.image`blueBackground`)
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-        enemiesSlain = 0
-        makeEnemy()
-        info.startCountdown(30)
+        if (curTilemap == 2) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel5`)
+            curTilemap = 5
+            coolGuy.setPosition(73, 25)
+            scene.setBackgroundImage(assets.image`blueBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
+            info.startCountdown(30)
+            // changing the 2nd leaves tile in room 2 for room 5
+        }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile7`, function (sprite, location) {
-        tiles.setCurrentTilemap(tilemap`ForestLevel1`)
-        curTilemap = 1
-        coolGuy.setPosition(192, 225)
-        scene.setBackgroundImage(assets.image`forest1`)
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-        enemiesSlain = 0
-        makeEnemy()
+        if (curTilemap == 2) {
+            tiles.setCurrentTilemap(tilemap`ForestLevel1`)
+            curTilemap = 1
+            coolGuy.setPosition(192, 225)
+            scene.setBackgroundImage(assets.image`forest1`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            enemiesSlain = 0
+            makeEnemy()
+        }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath3`, function (sprite, location) {
-        if (location.row == 7) {
+        if (curTilemap == 2 && location.row == 7) {
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             coolGuy.setPosition(30, 152)
@@ -326,7 +333,7 @@ function tileMap2Transitions() {
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath6`, function (sprite, location) {
-        if (location.row == 8) {
+        if (curTilemap == 2 && location.row == 8) {
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             coolGuy.setPosition(30, 152)
@@ -337,7 +344,7 @@ function tileMap2Transitions() {
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath9`, function (sprite, location) {
-        if (location.row == 9) {
+        if (curTilemap == 2 && location.row == 9) {
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             coolGuy.setPosition(30, 152)
@@ -350,7 +357,7 @@ function tileMap2Transitions() {
 }
 function tileMap3Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass1`, function (sprite, location) {
-        if (location.col == 0) {
+        if (curTilemap == 3 && location.col == 0) {
             tiles.setCurrentTilemap(tilemap`ForestLevel2`)
             curTilemap = 2
             coolGuy.setPosition(230, 135)
@@ -361,7 +368,7 @@ function tileMap3Transitions() {
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
-        if (location.col == 0) {
+        if (curTilemap == 3 && location.col == 0) {
             tiles.setCurrentTilemap(tilemap`ForestLevel2`)
             curTilemap = 2
             coolGuy.setPosition(230, 135)
@@ -372,7 +379,7 @@ function tileMap3Transitions() {
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
-        if(location.col == 15) {
+        if(curTilemap == 3 && location.col == 15) {
             tiles.setCurrentTilemap(tilemap`ForestLevel4`)
             curTilemap = 4
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(1, 3))
@@ -387,30 +394,34 @@ function tileMap3Transitions() {
 }
 function tileMap4Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
-        if(location.col == 0) {
+        if(curTilemap == 4 && location.col == 0) {
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(14,3))
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
             //need to create a default state of the box being on the button when completed
+            // add counters to find mem leak
             enemiesSlain = 0
             makeEnemy()
+            sprites.destroyAllSpritesOfKind(SpriteKind.Box)
         }
     })
 }
 function tileMap5Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-        info.stopCountdown()
-        tiles.setCurrentTilemap(tilemap`ForestLevel2`)
-        curTilemap = 2
-        coolGuy.setPosition(73, 230)
-        scene.setBackgroundImage(assets.image`greenBackground`)
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-        sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
-        sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
-        enemiesSlain = 0
-        makeEnemy()
+        if(curTilemap == 5) {
+            info.stopCountdown()
+            tiles.setCurrentTilemap(tilemap`ForestLevel2`)
+            curTilemap = 2
+            coolGuy.setPosition(73, 230)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+            sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
     })
 }
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -511,7 +522,7 @@ function noMovement() {
     controller.moveSprite(coolGuy, 0, 0)
 }
 
-
+// 
 let coolGuy: Sprite
 let upSword: Sprite
 let downSword: Sprite
@@ -576,11 +587,15 @@ game.onUpdate(function () {
     
 })
 game.onUpdateInterval(2000, function () {
-    makeTraps(2000)
+    if(curTilemap == 5) {
+        makeTraps(2000)
+    }
 })
 game.onUpdateInterval(1000, function () {
     tilemapTransitions()
-    makeTraps(1000)
+    if(curTilemap == 5) {
+        makeTraps(1000)
+    }
 })
 // game.onUpdateInterval(5000, function () {
 //     control.heapSnapshot()
