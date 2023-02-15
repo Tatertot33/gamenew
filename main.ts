@@ -393,6 +393,7 @@ function tileMap4Transitions() {
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(14,3))
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            //need to create a default state of the box being on the button when completed
             enemiesSlain = 0
             makeEnemy()
         }
@@ -450,11 +451,11 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, otherSpri
     }
     woodBox.follow(boxFollower, 80)
 })
-sprites.onCreated(SpriteKind.Box, function(sprite) {
-    if (sprites.allOfKind(SpriteKind.Box).length >= 3) {
-        sprite.destroy()
-    }
-})
+// sprites.onCreated(SpriteKind.Box, function(sprite) {
+//     if (sprites.allOfKind(SpriteKind.Box).length >= 4) {
+//         sprite.destroy()
+//     }
+// })
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.TrapProjectile, function (sprite, otherSprite) {
     if(isSwingRight) {
         otherSprite.setVelocity(75,0)
