@@ -13,7 +13,8 @@ enum SpriteKind {
     Weapon,
     Trap,
     TrapProjectile,
-    Box
+    Box,
+    Button
 }
 
 function makeSprites() {
@@ -143,6 +144,17 @@ function makeTraps(interval: Number) {
         })
     }
 }
+// function updatePuzzle(direction: Number) { 
+//     if(direction == 1 /*up*/) {
+//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x, woodBox.y - 1))
+//     } else if(direction == 2 /*right*/) {
+//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x + 1, woodBox.y))
+//     } else if(direction == 3 /*down*/) {
+//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x, woodBox.y + 1))
+//     } else if(direction == 4 /*left*/) {
+//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x - 1, woodBox.y))
+//     }
+// }
 function makeGuyAnimations() {
     swordGuyWalk = animation.createAnimation(ActionKind.SwordWalking, 200)
     swordGuyWalk.addAnimationFrame(assets.image`swordGuy1`)
@@ -398,8 +410,16 @@ function tileMap3Transitions() {
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
             enemiesSlain = 0
             makeEnemy()
-            woodBox = sprites.create(assets.image`woodBox`, SpriteKind.Box)
-            tiles.placeOnTile(woodBox, tiles.getTileLocation(6, 13))
+            if(boxReachedEnd) {
+                woodBox = sprites.create(assets.image`woodBox`, SpriteKind.Box)
+                tiles.placeOnTile(woodBox, tiles.getTileLocation(6, 13))
+                tiles.setTileAt(tiles.getTileLocation(13, 2), assets.tile`buttonPressed`)
+            } else {
+                woodBox = sprites.create(assets.image`woodBox`, SpriteKind.Box)
+                boxGoal = sprites.create(assets.image`nothing`, SpriteKind.Button)
+                tiles.placeOnTile(woodBox, tiles.getTileLocation(6, 13))
+                tiles.placeOnTile(boxGoal, tiles.getTileLocation(13, 2))
+            }
         }
     })
 }
@@ -412,11 +432,12 @@ function tileMap4Transitions() {
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(14,3))
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-            //need to create a default state of the box being on the button when completed
-            // add counters to find mem leak
+            //need to create a default state of the box being on the button when completed (done)
+            // add counters to find mem leak (done)
             enemiesSlain = 0
             makeEnemy()
             sprites.destroyAllSpritesOfKind(SpriteKind.Box)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Button)
         }
     })
 }
@@ -462,18 +483,21 @@ sprites.onOverlap(SpriteKind.TrapProjectile, SpriteKind.Enemy, function (sprite,
     }
 })
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, otherSprite) {
-    boxReachedEnd = false
-    boxFollower = sprites.create(assets.image`nothing`, SpriteKind.Box)
-    if (isSwingRight) {
-        tiles.placeOnTile(boxFollower, tiles.getTileLocation(woodBox.tilemapLocation().x + 1, woodBox.tilemapLocation().y))
-    } else if (isSwingLeft) {
-        tiles.placeOnTile(boxFollower, tiles.getTileLocation(woodBox.tilemapLocation().x - 1, woodBox.tilemapLocation().y))
-    } else if (isSwingUp) {
-        tiles.placeOnTile(boxFollower, tiles.getTileLocation(woodBox.tilemapLocation().x, woodBox.tilemapLocation().y - 1))
-    } else if (isSwingDown) {
-        tiles.placeOnTile(boxFollower, tiles.getTileLocation(woodBox.tilemapLocation().x, woodBox.tilemapLocation().y + 1))
+    if(!boxReachedEnd) {
+        if (isSwingRight) {
+            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x + 1, woodBox.tilemapLocation().y))
+        } else if (isSwingLeft) {
+            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x - 1, woodBox.tilemapLocation().y))
+        } else if (isSwingUp) {
+            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x, woodBox.tilemapLocation().y - 1))
+        } else if (isSwingDown) {
+            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x, woodBox.tilemapLocation().y + 1))
+        }
     }
-    woodBox.follow(boxFollower, 80)
+    if(woodBox.tilemapLocation().x == boxGoal.tilemapLocation().x && woodBox.tilemapLocation().y == boxGoal.tilemapLocation().y) {
+        tiles.setTileAt(tiles.getTileLocation(13, 2), assets.tile`buttonPressed`)
+        boxReachedEnd = true
+    }
 })
 // sprites.onCreated(SpriteKind.Box, function(sprite) {
 //     if (sprites.allOfKind(SpriteKind.Box).length >= 4) {
@@ -543,7 +567,7 @@ let rightSword: Sprite
 let leftSword: Sprite
 let sawProj: Sprite
 let woodBox: Sprite
-let boxFollower: Sprite
+let boxGoal: Sprite
 let guyWalk: animation.Animation
 let swordGuyWalk: animation.Animation
 let enemyBurger: Sprite
@@ -557,7 +581,7 @@ let isSwingDown = false
 let isSwingLeft = false
 let isSwingRight = false
 let trapping = false
-let boxReachedEnd = true
+let boxReachedEnd = false
 let enemiesLeft1 = true
 let enemiesLeft2 = true
 let enemiesLeft3 = true
