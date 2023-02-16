@@ -74,6 +74,7 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
     enemiesSlain += 1
 })
 function makeTraps(interval: Number) {
+    counter2++
     if (curTilemap == 5 && !trapping) {
         if (interval == 1000) {
             if (coolGuy.y <= 100) {
@@ -267,6 +268,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function tilemapTransitions() {
+    counter1++
     if (curTilemap == 1) {
         tileMap1Transitions()
     }
@@ -286,6 +288,7 @@ function tilemapTransitions() {
 function tileMap1Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
         if(curTilemap == 1) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel2`)
             curTilemap = 2
             coolGuy.setPosition(192, 30)
@@ -297,8 +300,9 @@ function tileMap1Transitions() {
     })
 }
 function tileMap2Transitions() {
-    scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile20`, function (sprite, location) {
         if (curTilemap == 2) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel5`)
             curTilemap = 5
             coolGuy.setPosition(73, 25)
@@ -312,6 +316,7 @@ function tileMap2Transitions() {
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile7`, function (sprite, location) {
         if (curTilemap == 2) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel1`)
             curTilemap = 1
             coolGuy.setPosition(192, 225)
@@ -323,6 +328,7 @@ function tileMap2Transitions() {
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath3`, function (sprite, location) {
         if (curTilemap == 2 && location.row == 7) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             coolGuy.setPosition(30, 152)
@@ -334,6 +340,7 @@ function tileMap2Transitions() {
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath6`, function (sprite, location) {
         if (curTilemap == 2 && location.row == 8) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             coolGuy.setPosition(30, 152)
@@ -345,6 +352,7 @@ function tileMap2Transitions() {
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tilePath9`, function (sprite, location) {
         if (curTilemap == 2 && location.row == 9) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             coolGuy.setPosition(30, 152)
@@ -358,6 +366,7 @@ function tileMap2Transitions() {
 function tileMap3Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass1`, function (sprite, location) {
         if (curTilemap == 3 && location.col == 0) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel2`)
             curTilemap = 2
             coolGuy.setPosition(230, 135)
@@ -369,6 +378,7 @@ function tileMap3Transitions() {
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
         if (curTilemap == 3 && location.col == 0) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel2`)
             curTilemap = 2
             coolGuy.setPosition(230, 135)
@@ -380,6 +390,7 @@ function tileMap3Transitions() {
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
         if(curTilemap == 3 && location.col == 15) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel4`)
             curTilemap = 4
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(1, 3))
@@ -395,6 +406,7 @@ function tileMap3Transitions() {
 function tileMap4Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
         if(curTilemap == 4 && location.col == 0) {
+            checkEnemiesAlive()
             tiles.setCurrentTilemap(tilemap`ForestLevel3`)
             curTilemap = 3
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(14,3))
@@ -411,6 +423,7 @@ function tileMap4Transitions() {
 function tileMap5Transitions() {
     scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
         if(curTilemap == 5) {
+            checkEnemiesAlive()
             info.stopCountdown()
             tiles.setCurrentTilemap(tilemap`ForestLevel2`)
             curTilemap = 2
@@ -555,6 +568,12 @@ let curTilemap = 1
 let enemiesSlain = 0
 let numEnemies: Number
 
+let counter1 = 0
+let counter2 = 0
+let counter3 = 0
+let counter4 = 0
+let counter5 = 0
+
 makeSprites()
 makeEnemy()
 makeGuyAnimations()
@@ -573,11 +592,11 @@ game.onUpdate(function () {
     if (!(moving)) {
         animation.stopAnimation(animation.AnimationTypes.All, coolGuy)
     }
-    checkEnemiesAlive()
     if (coolGuy.y >= 100 && curTilemap == 5 && notFollowing5) {
         enemyBurger.follow(coolGuy, 10)
         notFollowing5 = false
     }
+    // 
     // if (sprites.allOfKind(SpriteKind.Box).length == 3) {
     //     if (woodBox.x == boxFollower.x && woodBox.y == boxFollower.y) {
     //         boxReachedEnd = true
@@ -592,7 +611,9 @@ game.onUpdateInterval(2000, function () {
     }
 })
 game.onUpdateInterval(1000, function () {
-    tilemapTransitions()
+    if (coolGuy.y <= 32 || coolGuy.y >= 224 || coolGuy.x <= 32 || coolGuy.x >= 224) {
+        tilemapTransitions()
+    }
     if(curTilemap == 5) {
         makeTraps(1000)
     }
