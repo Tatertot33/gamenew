@@ -19,6 +19,7 @@ enum SpriteKind {
 
 function makeSprites() {
     coolGuy = sprites.create(assets.image`swordGuy1`, SpriteKind.Player)
+    coolGuy.z = 5
     leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
     rightSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
     upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
@@ -412,7 +413,7 @@ function tileMap3Transitions() {
             makeEnemy()
             if(boxReachedEnd) {
                 woodBox = sprites.create(assets.image`woodBox`, SpriteKind.Box)
-                tiles.placeOnTile(woodBox, tiles.getTileLocation(6, 13))
+                tiles.placeOnTile(woodBox, tiles.getTileLocation(13, 2))
                 tiles.setTileAt(tiles.getTileLocation(13, 2), assets.tile`buttonPressed`)
             } else {
                 woodBox = sprites.create(assets.image`woodBox`, SpriteKind.Box)
@@ -420,6 +421,8 @@ function tileMap3Transitions() {
                 tiles.placeOnTile(woodBox, tiles.getTileLocation(6, 13))
                 tiles.placeOnTile(boxGoal, tiles.getTileLocation(13, 2))
             }
+            curLocationX = woodBox.tilemapLocation().column
+            curLocationY = woodBox.tilemapLocation().row
         }
     })
 }
@@ -482,22 +485,33 @@ sprites.onOverlap(SpriteKind.TrapProjectile, SpriteKind.Enemy, function (sprite,
         otherSprite.destroy()
     }
 })
-sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, otherSprite) {
-    if(!boxReachedEnd) {
+sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, box) {
+    if(!boxReachedEnd && !boxMoving) {
+        boxMoving = true
+        //woodBox.destroy()
+        //woodBox = sprites.create(assets.image`woodBox`, SpriteKind.Box)
+        box.z = 1
+        //box.setPosition(120, 200)
         if (isSwingRight) {
-            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x + 1, woodBox.tilemapLocation().y))
+            tiles.placeOnTile(box, tiles.getTileLocation(curLocationX + 1, curLocationY))
         } else if (isSwingLeft) {
-            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x - 1, woodBox.tilemapLocation().y))
+            tiles.placeOnTile(box, tiles.getTileLocation(curLocationX - 1, curLocationY))
         } else if (isSwingUp) {
-            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x, woodBox.tilemapLocation().y - 1))
+            tiles.placeOnTile(box, tiles.getTileLocation(curLocationX, curLocationY - 1))
         } else if (isSwingDown) {
-            tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.tilemapLocation().x, woodBox.tilemapLocation().y + 1))
+            tiles.placeOnTile(box, tiles.getTileLocation(curLocationX, curLocationY + 1))
         }
+        curLocationX = box.tilemapLocation().column
+        curLocationY = box.tilemapLocation().row
+        timer.after(250, function() {
+            boxMoving = false
+        })
     }
-    if(woodBox.tilemapLocation().x == boxGoal.tilemapLocation().x && woodBox.tilemapLocation().y == boxGoal.tilemapLocation().y) {
+    if(woodBox.tilemapLocation().column == boxGoal.tilemapLocation().column && woodBox.tilemapLocation().row == boxGoal.tilemapLocation().row) {
         tiles.setTileAt(tiles.getTileLocation(13, 2), assets.tile`buttonPressed`)
         boxReachedEnd = true
     }
+    
 })
 // sprites.onCreated(SpriteKind.Box, function(sprite) {
 //     if (sprites.allOfKind(SpriteKind.Box).length >= 4) {
@@ -588,9 +602,13 @@ let enemiesLeft3 = true
 let enemiesLeft4 = true
 let enemiesLeft5 = true
 let notFollowing5 = true
+let boxMoving = false
 let curTilemap = 1
 let enemiesSlain = 0
 let numEnemies: Number
+
+let curLocationX = 0 
+let curLocationY = 0
 
 let counter1 = 0
 let counter2 = 0
