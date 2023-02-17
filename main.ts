@@ -14,12 +14,13 @@ enum SpriteKind {
     Trap,
     TrapProjectile,
     Box,
-    Button
+    Button,
+    Misc
 }
 
 function makeSprites() {
     coolGuy = sprites.create(assets.image`swordGuy1`, SpriteKind.Player)
-    coolGuy.z = 5
+    coolGuy.z = 2
     leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
     rightSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
     upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
@@ -32,6 +33,7 @@ function makeEnemy() {
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger.setPosition(150, 150)
             enemyBurger.follow(coolGuy, 10)
+            enemyBurger.z = 3
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth.attachToSprite(enemyBurger)
             enemyHealth.setColor(2, 0)
@@ -39,10 +41,25 @@ function makeEnemy() {
             enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
+    if (curTilemap == 2) {
+        if (enemiesLeft2) {
+            numEnemies = 1
+            tacoAlive = true
+            enemyTaco = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+            enemyTaco.setPosition(125, 200)
+            enemyTaco.z = 3
+            enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth.attachToSprite(enemyBurger)
+            enemyHealth.setColor(2, 0)
+            enemyHealth.max = 2
+            enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+        }
+    }
     if (curTilemap == 5) {
         if (enemiesLeft5) {
             numEnemies = 1
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+            enemyBurger.z = 3
             tiles.placeOnTile(enemyBurger, tiles.getTileLocation(9, 7))
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth.attachToSprite(enemyBurger)
@@ -52,7 +69,13 @@ function makeEnemy() {
         }
     }
 }
-
+function updateEnemies() {
+    let throwBladeProj = sprites.createProjectileFromSprite(assets.image`throwBlade1`, enemyTaco, 70, 70)
+    animation.runImageAnimation(throwBladeProj, assets.animation`throwBladeAnim`, 200, true)
+    let bladeTarget = sprites.createProjectile(assets.image`nothing`, 0, 0, SpriteKind.Misc, coolGuy)
+    bladeTarget.setFlag(SpriteFlag.StayInScreen, true)
+    throwBladeProj.follow(bladeTarget)
+}
 function checkEnemiesAlive() {
     if (numEnemies == enemiesSlain && enemiesSlain != 0) {
         if (curTilemap == 1) {
@@ -585,6 +608,7 @@ let boxGoal: Sprite
 let guyWalk: animation.Animation
 let swordGuyWalk: animation.Animation
 let enemyBurger: Sprite
+let enemyTaco: Sprite
 let enemyHealth: StatusBarSprite
 let guyVulnerable = true
 let enemyVulnerable = true
@@ -603,6 +627,7 @@ let enemiesLeft4 = true
 let enemiesLeft5 = true
 let notFollowing5 = true
 let boxMoving = false
+let tacoAlive = false
 let curTilemap = 1
 let enemiesSlain = 0
 let numEnemies: Number
@@ -627,8 +652,8 @@ info.setLife(3)
 tiles.setCurrentTilemap(tilemap`ForestLevel1`)
 game.onUpdate(function () {
     rightSword.setPosition(coolGuy.x + 10, coolGuy.y)
-    upSword.setPosition(coolGuy.x, coolGuy.y - 10)
-    downSword.setPosition(coolGuy.x, coolGuy.y + 10)
+    upSword.setPosition(coolGuy.x, coolGuy.y - 12)
+    downSword.setPosition(coolGuy.x, coolGuy.y + 12)
     leftSword.setPosition(coolGuy.x - 10, coolGuy.y)
     moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
     if (!(moving)) {
@@ -651,6 +676,7 @@ game.onUpdateInterval(2000, function () {
     if(curTilemap == 5) {
         makeTraps(2000)
     }
+    updateEnemies()
 })
 game.onUpdateInterval(1000, function () {
     if (coolGuy.y <= 32 || coolGuy.y >= 224 || coolGuy.x <= 32 || coolGuy.x >= 224) {
