@@ -13,6 +13,7 @@ enum SpriteKind {
     Weapon,
     Trap,
     TrapProjectile,
+    EnemyProjectile,
     Box,
     Button,
     Misc
@@ -43,16 +44,39 @@ function makeEnemy() {
     }
     if (curTilemap == 2) {
         if (enemiesLeft2) {
-            numEnemies = 1
+            numEnemies = 3
             tacoAlive = true
             enemyTaco = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
             enemyTaco.setPosition(125, 200)
             enemyTaco.z = 3
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
-            enemyHealth.attachToSprite(enemyBurger)
+            enemyHealth.attachToSprite(enemyTaco)
             enemyHealth.setColor(2, 0)
             enemyHealth.max = 2
             enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+            
+        }
+    }
+    if(curTilemap == 4) {
+        if(enemiesLeft4) {
+            numEnemies = 3
+            tacoAlive = true
+            for (let i = 0; i < 3; i++) {
+                enemyTaco = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+                if(i == 0) {
+                    enemyTaco.setPosition(100, 220)
+                } else if(i==1) {
+                    enemyTaco.setPosition(150, 220)
+                } else {
+                    enemyTaco.setPosition(180, 190)
+                }
+                enemyTaco.z = 3
+                enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+                enemyHealth.attachToSprite(enemyTaco)
+                enemyHealth.setColor(2, 0)
+                enemyHealth.max = 2
+                enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+            }
         }
     }
     if (curTilemap == 5) {
@@ -70,11 +94,30 @@ function makeEnemy() {
     }
 }
 function updateEnemies() {
-    let throwBladeProj = sprites.createProjectileFromSprite(assets.image`throwBlade1`, enemyTaco, 70, 70)
-    animation.runImageAnimation(throwBladeProj, assets.animation`throwBladeAnim`, 200, true)
-    let bladeTarget = sprites.createProjectile(assets.image`nothing`, 0, 0, SpriteKind.Misc, coolGuy)
-    bladeTarget.setFlag(SpriteFlag.StayInScreen, true)
-    throwBladeProj.follow(bladeTarget)
+    //tacoTarget = sprites.createProjectileFromSprite(assets.image`nothing`, enemyTaco,)
+    if(curTilemap == 2 && enemiesLeft2) {
+        tacoBladeProj = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+        tacoBladeProj.setFlag(SpriteFlag.AutoDestroy, true)
+        tacoBladeProj.setBounceOnWall(true)
+        tacoBladeProj.setPosition(enemyTaco.x, enemyTaco.y)
+        animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
+        const dx = coolGuy.x - tacoBladeProj.x;
+        const dy = coolGuy.y - tacoBladeProj.y;
+
+        const angleToTarget = Math.atan2(dy, dx);
+
+        const targetTrajVx = Math.cos(angleToTarget) * 75;
+        const targetTrajVy = Math.sin(angleToTarget) * 75;
+        tacoBladeProj.setVelocity(targetTrajVx,targetTrajVy)
+    }
+    
+    // tacoBladeProj = sprites.createProjectileFromSprite(assets.image`throwBlade1`, enemyTaco, 70, 70)
+    // animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
+    // tacoBladeProj = sprites.createProjectileFromSprite(assets.image`throwBlade1`, enemyTaco, 70, 70)
+    // animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
+    //let bladeTarget = sprites.createProjectile(assets.image`nothing`, 0, 0, SpriteKind.Misc, coolGuy)
+    //bladeTarget.setFlag(SpriteFlag.StayInScreen, true)
+    //throwBladeProj.follow(bladeTarget)
 }
 function checkEnemiesAlive() {
     if (numEnemies == enemiesSlain && enemiesSlain != 0) {
@@ -330,6 +373,7 @@ function tileMap1Transitions() {
             coolGuy.setPosition(192, 30)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -344,6 +388,7 @@ function tileMap2Transitions() {
             coolGuy.setPosition(73, 25)
             scene.setBackgroundImage(assets.image`blueBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
             info.startCountdown(30)
@@ -358,6 +403,7 @@ function tileMap2Transitions() {
             coolGuy.setPosition(192, 225)
             scene.setBackgroundImage(assets.image`forest1`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -370,6 +416,7 @@ function tileMap2Transitions() {
             coolGuy.setPosition(30, 152)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -382,6 +429,7 @@ function tileMap2Transitions() {
             coolGuy.setPosition(30, 152)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -394,6 +442,7 @@ function tileMap2Transitions() {
             coolGuy.setPosition(30, 152)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -408,6 +457,7 @@ function tileMap3Transitions() {
             coolGuy.setPosition(230, 135)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -420,6 +470,7 @@ function tileMap3Transitions() {
             coolGuy.setPosition(230, 135)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -432,6 +483,7 @@ function tileMap3Transitions() {
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(1, 3))
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             enemiesSlain = 0
             makeEnemy()
             if(boxReachedEnd) {
@@ -458,6 +510,7 @@ function tileMap4Transitions() {
             tiles.placeOnTile(coolGuy, tiles.getTileLocation(14,3))
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             //need to create a default state of the box being on the button when completed (done)
             // add counters to find mem leak (done)
             enemiesSlain = 0
@@ -477,6 +530,7 @@ function tileMap5Transitions() {
             coolGuy.setPosition(73, 230)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
             sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
             enemiesSlain = 0
@@ -541,6 +595,17 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, box) {
 //         sprite.destroy()
 //     }
 // })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.EnemyProjectile, function (sprite, otherSprite) {
+    if (guyVulnerable) {
+        info.player1.setLife(info.life() - 1)
+        guyVulnerable = false
+        timer.after(1000, function () {
+            guyVulnerable = true
+        })
+    }
+    animation.stopAnimation(animation.AnimationTypes.All, otherSprite)
+    otherSprite.destroy()
+})
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.TrapProjectile, function (sprite, otherSprite) {
     if(isSwingRight) {
         otherSprite.setVelocity(75,0)
@@ -603,6 +668,7 @@ let downSword: Sprite
 let rightSword: Sprite
 let leftSword: Sprite
 let sawProj: Sprite
+let tacoBladeProj: Sprite
 let woodBox: Sprite
 let boxGoal: Sprite
 let guyWalk: animation.Animation
@@ -610,6 +676,7 @@ let swordGuyWalk: animation.Animation
 let enemyBurger: Sprite
 let enemyTaco: Sprite
 let enemyHealth: StatusBarSprite
+let tacoTarget: Sprite
 let guyVulnerable = true
 let enemyVulnerable = true
 let moving = false
@@ -676,7 +743,9 @@ game.onUpdateInterval(2000, function () {
     if(curTilemap == 5) {
         makeTraps(2000)
     }
-    updateEnemies()
+    if(curTilemap == 2 && enemiesSlain == 0) {
+        updateEnemies()
+    }
 })
 game.onUpdateInterval(1000, function () {
     if (coolGuy.y <= 32 || coolGuy.y >= 224 || coolGuy.x <= 32 || coolGuy.x >= 224) {

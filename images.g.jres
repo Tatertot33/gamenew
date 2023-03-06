@@ -244,6 +244,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "throwBlade1"
     },
+    "image49": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAC7CwAAAAAAsAu7AAAAAACwALAAAAAAALALuwAAAAAAALu7CwAAAAAAAODrAAAAAAAAAOsLAAAAAAAAu+4AAAAAALCw7gsAAAAADgDuCwAAAAAA4LALAAAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "silverKey"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",
