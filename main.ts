@@ -16,6 +16,7 @@ enum SpriteKind {
     EnemyProjectile,
     Box,
     Button,
+    Key,
     Misc
 }
 
@@ -61,22 +62,32 @@ function makeEnemy() {
         if(enemiesLeft4) {
             numEnemies = 3
             tacoAlive = true
-            for (let i = 0; i < 3; i++) {
-                enemyTaco = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
-                if(i == 0) {
-                    enemyTaco.setPosition(100, 220)
-                } else if(i==1) {
-                    enemyTaco.setPosition(150, 220)
-                } else {
-                    enemyTaco.setPosition(180, 190)
-                }
-                enemyTaco.z = 3
-                enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
-                enemyHealth.attachToSprite(enemyTaco)
-                enemyHealth.setColor(2, 0)
-                enemyHealth.max = 2
-                enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
-            }
+            enemyTaco = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+            enemyTaco.setPosition(100, 220)
+            enemyTaco.z = 3
+            enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth.attachToSprite(enemyTaco)
+            enemyHealth.setColor(2, 0)
+            enemyHealth.max = 1
+            enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+
+            enemyTaco2 = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+            enemyTaco2.setPosition(150, 220)
+            enemyTaco2.z = 3
+            enemyHealth2 = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth2.attachToSprite(enemyTaco2)
+            enemyHealth2.setColor(2, 0)
+            enemyHealth2.max = 1
+            enemyHealth2.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+
+            enemyTaco3 = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+            enemyTaco3.setPosition(180, 190)
+            enemyTaco3.z = 3
+            enemyHealth3 = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth3.attachToSprite(enemyTaco3)
+            enemyHealth3.setColor(2, 0)
+            enemyHealth3.max = 1
+            enemyHealth3.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
     if (curTilemap == 5) {
@@ -96,19 +107,68 @@ function makeEnemy() {
 function updateEnemies() {
     //tacoTarget = sprites.createProjectileFromSprite(assets.image`nothing`, enemyTaco,)
     if(curTilemap == 2 && enemiesLeft2) {
-        tacoBladeProj = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
-        tacoBladeProj.setFlag(SpriteFlag.AutoDestroy, true)
-        tacoBladeProj.setBounceOnWall(true)
-        tacoBladeProj.setPosition(enemyTaco.x, enemyTaco.y)
-        animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
-        const dx = coolGuy.x - tacoBladeProj.x;
-        const dy = coolGuy.y - tacoBladeProj.y;
+        if (enemyHealth.value != 0) {
+            tacoBladeProj = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+            tacoBladeProj.setFlag(SpriteFlag.AutoDestroy, true)
+            tacoBladeProj.setBounceOnWall(true)
+            tacoBladeProj.setPosition(enemyTaco.x, enemyTaco.y)
+            animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
+            let dx = coolGuy.x - tacoBladeProj.x;
+            let dy = coolGuy.y - tacoBladeProj.y;
 
-        const angleToTarget = Math.atan2(dy, dx);
+            let angleToTarget = Math.atan2(dy, dx);
 
-        const targetTrajVx = Math.cos(angleToTarget) * 75;
-        const targetTrajVy = Math.sin(angleToTarget) * 75;
-        tacoBladeProj.setVelocity(targetTrajVx,targetTrajVy)
+            let targetTrajVx = Math.cos(angleToTarget) * 75;
+            let targetTrajVy = Math.sin(angleToTarget) * 75;
+            tacoBladeProj.setVelocity(targetTrajVx, targetTrajVy)
+        }
+    }
+    else if(curTilemap == 4 && enemiesLeft4) {
+        if(enemyHealth.value != 0) {
+            tacoBladeProj = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+            tacoBladeProj.setFlag(SpriteFlag.AutoDestroy, true)
+            tacoBladeProj.setBounceOnWall(true)
+            tacoBladeProj.setPosition(enemyTaco.x, enemyTaco.y)
+            animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
+            const dx = coolGuy.x - tacoBladeProj.x;
+            const dy = coolGuy.y - tacoBladeProj.y;
+
+            const angleToTarget = Math.atan2(dy, dx);
+
+            const targetTrajVx = Math.cos(angleToTarget) * 75;
+            const targetTrajVy = Math.sin(angleToTarget) * 75;
+            tacoBladeProj.setVelocity(targetTrajVx, targetTrajVy)
+        }
+        if(enemyHealth2.value != 0) {
+            tacoBladeProj2 = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+            tacoBladeProj2.setFlag(SpriteFlag.AutoDestroy, true)
+            tacoBladeProj2.setBounceOnWall(true)
+            tacoBladeProj2.setPosition(enemyTaco2.x, enemyTaco2.y)
+            animation.runImageAnimation(tacoBladeProj2, assets.animation`throwBladeAnim`, 200, true)
+            const dx = coolGuy.x - tacoBladeProj2.x;
+            const dy = coolGuy.y - tacoBladeProj2.y;
+
+            const angleToTarget = Math.atan2(dy, dx);
+
+            const targetTrajVx = Math.cos(angleToTarget) * 75;
+            const targetTrajVy = Math.sin(angleToTarget) * 75;
+            tacoBladeProj2.setVelocity(targetTrajVx, targetTrajVy)
+        }
+        if(enemyHealth3.value != 0) {
+            tacoBladeProj3 = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+            tacoBladeProj3.setFlag(SpriteFlag.AutoDestroy, true)
+            tacoBladeProj3.setBounceOnWall(true)
+            tacoBladeProj3.setPosition(enemyTaco3.x, enemyTaco3.y)
+            animation.runImageAnimation(tacoBladeProj3, assets.animation`throwBladeAnim`, 200, true)
+            const dx = coolGuy.x - tacoBladeProj3.x;
+            const dy = coolGuy.y - tacoBladeProj3.y;
+
+            const angleToTarget = Math.atan2(dy, dx);
+
+            const targetTrajVx = Math.cos(angleToTarget) * 75;
+            const targetTrajVy = Math.sin(angleToTarget) * 75;
+            tacoBladeProj3.setVelocity(targetTrajVx, targetTrajVy)
+        }
     }
     
     // tacoBladeProj = sprites.createProjectileFromSprite(assets.image`throwBlade1`, enemyTaco, 70, 70)
@@ -540,14 +600,27 @@ function tileMap5Transitions() {
 }
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (enemyVulnerable) {
-        enemyHealth.value += -1
+        if(otherSprite == enemyTaco || otherSprite == enemyBurger) {
+            enemyHealth.value += -1
+        } else if(otherSprite == enemyTaco2) {
+            enemyHealth2.value += -1
+        } else if(otherSprite == enemyTaco3) {
+            enemyHealth3.value += -1
+        }
         enemyVulnerable = false
         timer.after(500, function () {
             enemyVulnerable = true
         })
     }
-    if (enemyHealth.value == 0) {
+    if (enemyHealth.value == 0 && (otherSprite == enemyTaco || otherSprite == enemyBurger)) {
         otherSprite.destroy()
+    } 
+    if(curTilemap == 4) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyTaco2) {
+            otherSprite.destroy()
+        } else if (enemyHealth3.value == 0 && otherSprite == enemyTaco3) {
+            otherSprite.destroy()
+        }
     }
 })
 sprites.onOverlap(SpriteKind.TrapProjectile, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -605,6 +678,12 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.EnemyProjectile, function (sprit
     }
     animation.stopAnimation(animation.AnimationTypes.All, otherSprite)
     otherSprite.destroy()
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Key, function (sprite, otherSprite) {
+    otherSprite.destroy()
+    hasKey = true
+    keySprite = sprites.create(assets.image`silverKey`, SpriteKind.Misc)
+    keySprite.setFlag(SpriteFlag.RelativeToCamera, true)
 })
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.TrapProjectile, function (sprite, otherSprite) {
     if(isSwingRight) {
@@ -669,14 +748,21 @@ let rightSword: Sprite
 let leftSword: Sprite
 let sawProj: Sprite
 let tacoBladeProj: Sprite
+let tacoBladeProj2: Sprite
+let tacoBladeProj3: Sprite
 let woodBox: Sprite
 let boxGoal: Sprite
 let guyWalk: animation.Animation
 let swordGuyWalk: animation.Animation
 let enemyBurger: Sprite
 let enemyTaco: Sprite
+let enemyTaco2: Sprite
+let enemyTaco3: Sprite
 let enemyHealth: StatusBarSprite
+let enemyHealth2: StatusBarSprite
+let enemyHealth3: StatusBarSprite
 let tacoTarget: Sprite
+let keySprite: Sprite
 let guyVulnerable = true
 let enemyVulnerable = true
 let moving = false
@@ -695,6 +781,7 @@ let enemiesLeft5 = true
 let notFollowing5 = true
 let boxMoving = false
 let tacoAlive = false
+let hasKey = false
 let curTilemap = 1
 let enemiesSlain = 0
 let numEnemies: Number
@@ -743,7 +830,7 @@ game.onUpdateInterval(2000, function () {
     if(curTilemap == 5) {
         makeTraps(2000)
     }
-    if(curTilemap == 2 && enemiesSlain == 0) {
+    if(curTilemap == 2 || curTilemap == 4) {
         updateEnemies()
     }
 })
