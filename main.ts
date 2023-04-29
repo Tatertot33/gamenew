@@ -43,7 +43,7 @@ function makeEnemy() {
             enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
-    if (curTilemap == 2) {
+    else if (curTilemap == 2) {
         if (enemiesLeft2) {
             numEnemies = 2
             tacoAlive = true
@@ -67,7 +67,7 @@ function makeEnemy() {
             enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
-    if(curTilemap == 4) {
+    else if(curTilemap == 4) {
         if(enemiesLeft4) {
             numEnemies = 3
             tacoAlive = true
@@ -99,8 +99,8 @@ function makeEnemy() {
             enemyHealth3.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
-    if (curTilemap == 5) {
-        if (enemiesLeft5) {
+    else if (curTilemap == 5) {
+        if(enemiesLeft5) {
             numEnemies = 1
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger.z = 3
@@ -112,9 +112,36 @@ function makeEnemy() {
             enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
+    else if (curTilemap == 6) {
+        if(enemiesLeft6) {
+            numEnemies = 4
+            enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+            enemyBurger.z = 3
+            tiles.placeOnTile(enemyBurger, tiles.getTileLocation(9, 7))
+            enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth.attachToSprite(enemyBurger)
+            enemyHealth.setColor(2, 0)
+            enemyHealth.max = 3
+            enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+
+            enemyBurger2 = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+            enemyBurger2.z = 3
+            tiles.placeOnTile(enemyBurger2, tiles.getTileLocation(9, 7))
+            enemyHealth2 = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth2.attachToSprite(enemyBurger)
+            enemyHealth2.setColor(2, 0)
+            enemyHealth2.max = 3
+            enemyHealth2.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+        }
+    }
+    else if (curTilemap == 8) {
+        if (enemiesLeft8) {
+            numEnemies = 2
+
+        }
+    }
 }
 function updateEnemies() {
-    //tacoTarget = sprites.createProjectileFromSprite(assets.image`nothing`, enemyTaco,)
     if(curTilemap == 2 && enemiesLeft2) {
         if (enemyHealth2.value != 0) {
             tacoBladeProj = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
@@ -205,6 +232,12 @@ function checkEnemiesAlive() {
         if (curTilemap == 5) {
             enemiesLeft5 = false
         }
+        if (curTilemap == 6) {
+            enemiesLeft6 = false
+        }
+        if (curTilemap == 8) {
+            enemiesLeft8 = false
+        }
     }
 }
 sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
@@ -280,17 +313,7 @@ function makeTraps(interval: Number) {
         })
     }
 }
-// function updatePuzzle(direction: Number) { 
-//     if(direction == 1 /*up*/) {
-//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x, woodBox.y - 1))
-//     } else if(direction == 2 /*right*/) {
-//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x + 1, woodBox.y))
-//     } else if(direction == 3 /*down*/) {
-//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x, woodBox.y + 1))
-//     } else if(direction == 4 /*left*/) {
-//         tiles.placeOnTile(woodBox, tiles.getTileLocation(woodBox.x - 1, woodBox.y))
-//     }
-// }
+
 function makeGuyAnimations() {
     swordGuyWalk = animation.createAnimation(ActionKind.SwordWalking, 200)
     swordGuyWalk.addAnimationFrame(assets.image`swordGuy1`)
@@ -606,6 +629,22 @@ function tileMap5Transitions() {
             makeEnemy()
         }
     })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass1`, function (sprite, location) {
+        if(curTilemap == 5 && location.row == 15) {
+            checkEnemiesAlive()
+            info.stopCountdown()
+            tiles.setCurrentTilemap(tilemap`ForestLevel6`)
+            curTilemap = 6
+            coolGuy.setPosition(192, 30)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+            sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
 }
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (enemyVulnerable) {
@@ -768,12 +807,14 @@ let boxGoal: Sprite
 let guyWalk: animation.Animation
 let swordGuyWalk: animation.Animation
 let enemyBurger: Sprite
+let enemyBurger2: Sprite
 let enemyTaco: Sprite
 let enemyTaco2: Sprite
 let enemyTaco3: Sprite
 let enemyHealth: StatusBarSprite
 let enemyHealth2: StatusBarSprite
 let enemyHealth3: StatusBarSprite
+let enemyHealth4: StatusBarSprite
 let tacoTarget: Sprite
 let keySprite: Sprite
 let guyVulnerable = true
@@ -791,6 +832,8 @@ let enemiesLeft2 = true
 let enemiesLeft3 = true
 let enemiesLeft4 = true
 let enemiesLeft5 = true
+let enemiesLeft6 = true
+let enemiesLeft8 = true
 let notFollowing5 = true
 let boxMoving = false
 let tacoAlive = false
