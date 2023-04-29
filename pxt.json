@@ -1,5 +1,5 @@
 {
-    "name": "The Legend of Cool Guy - Copy - Copy",
+    "name": "The Legend of Cool Guy - Copy - Copy - Copy",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -24,7 +24,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.12.24",
+        "target": "1.12.30",
         "targetId": "arcade"
     },
     "supportedTargets": [
