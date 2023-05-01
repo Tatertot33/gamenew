@@ -34,7 +34,6 @@ function makeEnemy() {
             numEnemies = 1
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger.setPosition(200, 150)
-            enemyBurger.follow(coolGuy, 20)
             enemyBurger.z = 3
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth.attachToSprite(enemyBurger)
@@ -58,7 +57,7 @@ function makeEnemy() {
 
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger.setPosition(200, 150)
-            enemyBurger.follow(coolGuy, 20)
+            enemyBurger.follow(coolGuy, 25)
             enemyBurger.z = 3
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth.attachToSprite(enemyBurger)
@@ -117,7 +116,7 @@ function makeEnemy() {
             numEnemies = 4
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger.z = 3
-            tiles.placeOnTile(enemyBurger, tiles.getTileLocation(9, 7))
+            tiles.placeOnTile(enemyBurger, tiles.getTileLocation(10, 11))
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth.attachToSprite(enemyBurger)
             enemyHealth.setColor(2, 0)
@@ -126,20 +125,224 @@ function makeEnemy() {
 
             enemyBurger2 = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger2.z = 3
-            tiles.placeOnTile(enemyBurger2, tiles.getTileLocation(9, 7))
+            tiles.placeOnTile(enemyBurger2, tiles.getTileLocation(2, 13))
             enemyHealth2 = statusbars.create(20, 4, StatusBarKind.Health)
-            enemyHealth2.attachToSprite(enemyBurger)
+            enemyHealth2.attachToSprite(enemyBurger2)
             enemyHealth2.setColor(2, 0)
             enemyHealth2.max = 3
             enemyHealth2.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+
+            enemyTaco3 = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+            enemyTaco3.z = 3
+            tiles.placeOnTile(enemyTaco3, tiles.getTileLocation(2, 6))
+            enemyHealth3 = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth3.attachToSprite(enemyTaco3)
+            enemyHealth3.setColor(2, 0)
+            enemyHealth3.max = 2
+            enemyHealth3.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+
+            enemyTaco4 = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+            enemyTaco4.z = 3
+            tiles.placeOnTile(enemyTaco4, tiles.getTileLocation(5, 13))
+            enemyHealth4 = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth4.attachToSprite(enemyTaco4)
+            enemyHealth4.setColor(2, 0)
+            enemyHealth4.max = 2
+            enemyHealth4.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
     else if (curTilemap == 8) {
         if (enemiesLeft8) {
-            numEnemies = 2
+            numEnemies = 3
+            enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+            enemyBurger.z = 3
+            enemyBurger.follow(coolGuy, 25)
+            tiles.placeOnTile(enemyBurger, tiles.getTileLocation(8, 4))
+            enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth.attachToSprite(enemyBurger)
+            enemyHealth.setColor(2, 0)
+            enemyHealth.max = 3
+            enemyHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
 
+            enemyBurger2 = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
+            enemyBurger2.z = 3
+            enemyBurger2.follow(coolGuy, 25)
+            tiles.placeOnTile(enemyBurger2, tiles.getTileLocation(8, 12))
+            enemyHealth2 = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth2.attachToSprite(enemyBurger2)
+            enemyHealth2.setColor(2, 0)
+            enemyHealth2.max = 3
+            enemyHealth2.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+
+            enemyTaco3 = sprites.create(assets.image`enemyTaco`, SpriteKind.Enemy)
+            enemyTaco3.z = 3
+            tiles.placeOnTile(enemyTaco3, tiles.getTileLocation(12, 8))
+            enemyHealth3 = statusbars.create(20, 4, StatusBarKind.Health)
+            enemyHealth3.attachToSprite(enemyTaco3)
+            enemyHealth3.setColor(2, 0)
+            enemyHealth3.max = 2
+            enemyHealth3.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
         }
     }
+    else if (curTilemap == 10) {
+        bossPizza = sprites.create(assets.image`bossPizza`, SpriteKind.Enemy)
+        bossPizza.z = 3
+        tiles.placeOnTile(bossPizza, tiles.getTileLocation(6, 6))
+        scaling.scaleToPercent(bossPizza, 150, ScaleDirection.Uniformly, ScaleAnchor.Middle)
+        bossHealth = statusbars.create(60, 12, StatusBarKind.Health)
+        bossHealth.attachToSprite(bossPizza)
+        bossHealth.setColor(2, 0)
+        bossHealth.max = 20
+        bossHealth.setBarBorder(1, 15)
+        bossHealth.setStatusBarFlag(StatusBarFlag.SmoothTransition, true)
+    }
+}
+function updateBoss() {
+    if(!halfHealth && bossHealth.value != 0) {
+        if(!dashing && !bossIsStunned) {
+            dashing = true
+            bossPizza.setImage(assets.image`bossPizzaDash`)
+            let dx = coolGuy.x - bossPizza.x;
+            let dy = coolGuy.y - bossPizza.y;
+            let angleToTarget = Math.atan2(dy, dx);
+            bossVx = Math.cos(angleToTarget) * 75;
+            bossVy = Math.sin(angleToTarget) * 75;
+            bossPizza.setVelocity(bossVx, bossVy)
+        } 
+        else if(dashing) {
+            if (bossPizza.vx != bossVx || bossPizza.vy != bossVy) {
+                bossPizza.setVelocity(0, 0)
+                bossIsStunned = true
+                dashing = false
+            }
+        } 
+        else if(bossIsStunned) {
+            bossPizza.setImage(assets.image`bossPizzaStunned`)
+            timer.after(3000, function() {
+                if(!halfHealth) {
+                    bossPizza.setImage(assets.image`bossPizza`)
+                } else {
+                    bossPizza.setImage(assets.image`bossPizzaAngry`)
+                }
+                timer.after(500, function() {
+                    bossIsStunned = false
+                })
+            })
+        }
+    } 
+    else if (halfHealth && bossHealth.value != 0) {
+        if (!dashing && !bossIsStunned && justUsedOrbs) {
+            dashing = true
+            bossPizza.setImage(assets.image`bossPizzaAngryDash`)
+            let dx = coolGuy.x - bossPizza.x;
+            let dy = coolGuy.y - bossPizza.y;
+            let angleToTarget = Math.atan2(dy, dx);
+            bossVx = Math.cos(angleToTarget) * 75;
+            bossVy = Math.sin(angleToTarget) * 75;
+            bossPizza.setVelocity(bossVx, bossVy)
+        }
+        else if (dashing) {
+            if (bossPizza.vx != bossVx || bossPizza.vy != bossVy) {
+                bossPizza.setVelocity(0, 0)
+                bossIsStunned = true
+                dashing = false
+            }
+        }
+        else if (bossIsStunned) {
+            bossPizza.setImage(assets.image`bossPizzaAngryStunned`)
+            timer.after(3000, function () {
+                bossPizza.setImage(assets.image`bossPizzaAngry`)
+                timer.after(500, function () {
+                    bossIsStunned = false
+                    justUsedOrbs = false
+                })
+            })
+        }
+        else if (!justUsedOrbs && !shootingOrbs) {
+            shootingOrbs = true
+            let dx = coolGuy.x - bossPizza.x;
+            let dy = coolGuy.y - bossPizza.y;
+            let angleToTarget = Math.atan2(dy, dx);
+            let targetTrajVx = Math.cos(angleToTarget) * 100;
+            let targetTrajVy = Math.sin(angleToTarget) * 100;
+            sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+            dx = coolGuy.x - bossPizza.x;
+            dy = coolGuy.y - bossPizza.y;
+            angleToTarget = Math.atan2(dy, dx);
+            targetTrajVx = Math.cos(angleToTarget + 15) * 100;
+            targetTrajVy = Math.sin(angleToTarget + 15) * 100;
+            sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+            dx = coolGuy.x - bossPizza.x;
+            dy = coolGuy.y - bossPizza.y;
+            angleToTarget = Math.atan2(dy, dx);
+            targetTrajVx = Math.cos(angleToTarget - 15) * 100;
+            targetTrajVy = Math.sin(angleToTarget - 15) * 100;
+            sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+            timer.after(100, function() {
+                dx = coolGuy.x - bossPizza.x;
+                dy = coolGuy.y - bossPizza.y;
+                angleToTarget = Math.atan2(dy, dx);
+                targetTrajVx = Math.cos(angleToTarget + 20) * 100;
+                targetTrajVy = Math.sin(angleToTarget + 20) * 100;
+                sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+                dx = coolGuy.x - bossPizza.x;
+                dy = coolGuy.y - bossPizza.y;
+                angleToTarget = Math.atan2(dy, dx);
+                targetTrajVx = Math.cos(angleToTarget + 10) * 100;
+                targetTrajVy = Math.sin(angleToTarget + 10) * 100;
+                sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+                
+                dx = coolGuy.x - bossPizza.x;
+                dy = coolGuy.y - bossPizza.y;
+                angleToTarget = Math.atan2(dy, dx);
+                targetTrajVx = Math.cos(angleToTarget - 10) * 100;
+                targetTrajVy = Math.sin(angleToTarget - 10) * 100;
+                sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+                dx = coolGuy.x - bossPizza.x;
+                dy = coolGuy.y - bossPizza.y;
+                angleToTarget = Math.atan2(dy, dx);
+                targetTrajVx = Math.cos(angleToTarget - 20) * 100;
+                targetTrajVy = Math.sin(angleToTarget - 20) * 100;
+                sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+                timer.after(200, function() {
+                    dx = coolGuy.x - bossPizza.x;
+                    dy = coolGuy.y - bossPizza.y;
+                    angleToTarget = Math.atan2(dy, dx);
+                    targetTrajVx = Math.cos(angleToTarget) * 100;
+                    targetTrajVy = Math.sin(angleToTarget) * 100;
+                    sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+                    dx = coolGuy.x - bossPizza.x;
+                    dy = coolGuy.y - bossPizza.y;
+                    angleToTarget = Math.atan2(dy, dx);
+                    targetTrajVx = Math.cos(angleToTarget + 15) * 100;
+                    targetTrajVy = Math.sin(angleToTarget + 15) * 100;
+                    sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+
+                    dx = coolGuy.x - bossPizza.x;
+                    dy = coolGuy.y - bossPizza.y;
+                    angleToTarget = Math.atan2(dy, dx);
+                    targetTrajVx = Math.cos(angleToTarget - 15) * 100;
+                    targetTrajVy = Math.sin(angleToTarget - 15) * 100;
+                    sprites.createProjectileFromSprite(assets.image`bossOrb`, bossPizza, targetTrajVx, targetTrajVy).setKind(SpriteKind.EnemyProjectile)
+                    justUsedOrbs = true
+                    shootingOrbs = false
+                })
+            })
+        }
+    }
+}
+function endGame() {
+    sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+    bossPizza.setImage(assets.image`bossPizzaDead`)
+    story.printDialog("Congratulations! You beat the Evil Pizza!", 80, 90, 50, 150)
+    game.gameOver(true)
 }
 function updateEnemies() {
     if(curTilemap == 2 && enemiesLeft2) {
@@ -206,14 +409,56 @@ function updateEnemies() {
             tacoBladeProj3.setVelocity(targetTrajVx, targetTrajVy)
         }
     }
-    
-    // tacoBladeProj = sprites.createProjectileFromSprite(assets.image`throwBlade1`, enemyTaco, 70, 70)
-    // animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
-    // tacoBladeProj = sprites.createProjectileFromSprite(assets.image`throwBlade1`, enemyTaco, 70, 70)
-    // animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
-    //let bladeTarget = sprites.createProjectile(assets.image`nothing`, 0, 0, SpriteKind.Misc, coolGuy)
-    //bladeTarget.setFlag(SpriteFlag.StayInScreen, true)
-    //throwBladeProj.follow(bladeTarget)
+    else if (curTilemap == 6 && enemiesLeft6) {
+        if (enemyHealth3.value != 0) {
+            tacoBladeProj = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+            tacoBladeProj.setFlag(SpriteFlag.AutoDestroy, true)
+            tacoBladeProj.setBounceOnWall(true)
+            tacoBladeProj.setPosition(enemyTaco3.x, enemyTaco3.y)
+            animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
+            const dx = coolGuy.x - tacoBladeProj.x;
+            const dy = coolGuy.y - tacoBladeProj.y;
+
+            const angleToTarget = Math.atan2(dy, dx);
+
+            const targetTrajVx = Math.cos(angleToTarget) * 75;
+            const targetTrajVy = Math.sin(angleToTarget) * 75;
+            tacoBladeProj.setVelocity(targetTrajVx, targetTrajVy)
+        }
+        if (enemyHealth4.value != 0) {
+            tacoBladeProj2 = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+            tacoBladeProj2.setFlag(SpriteFlag.AutoDestroy, true)
+            tacoBladeProj2.setBounceOnWall(true)
+            tacoBladeProj2.setPosition(enemyTaco4.x, enemyTaco4.y)
+            animation.runImageAnimation(tacoBladeProj2, assets.animation`throwBladeAnim`, 200, true)
+            const dx = coolGuy.x - tacoBladeProj2.x;
+            const dy = coolGuy.y - tacoBladeProj2.y;
+
+            const angleToTarget = Math.atan2(dy, dx);
+
+            const targetTrajVx = Math.cos(angleToTarget) * 75;
+            const targetTrajVy = Math.sin(angleToTarget) * 75;
+            tacoBladeProj2.setVelocity(targetTrajVx, targetTrajVy)
+        }
+    }
+    else if (curTilemap == 8 && enemiesLeft8) {
+        if (enemyHealth3.value != 0) {
+            tacoBladeProj = sprites.create(assets.image`throwBlade1`, SpriteKind.EnemyProjectile)
+            tacoBladeProj.setFlag(SpriteFlag.AutoDestroy, true)
+            tacoBladeProj.setBounceOnWall(false)
+            tacoBladeProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            tacoBladeProj.setPosition(enemyTaco3.x, enemyTaco3.y)
+            animation.runImageAnimation(tacoBladeProj, assets.animation`throwBladeAnim`, 200, true)
+            const dx = coolGuy.x - tacoBladeProj.x;
+            const dy = coolGuy.y - tacoBladeProj.y;
+
+            const angleToTarget = Math.atan2(dy, dx);
+
+            const targetTrajVx = Math.cos(angleToTarget) * 75;
+            const targetTrajVy = Math.sin(angleToTarget) * 75;
+            tacoBladeProj.setVelocity(targetTrajVx, targetTrajVy)
+        }
+    }
 }
 function checkEnemiesAlive() {
     if (numEnemies == enemiesSlain && enemiesSlain != 0) {
@@ -244,7 +489,6 @@ sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
     enemiesSlain += 1
 })
 function makeTraps(interval: Number) {
-    counter2++
     if (curTilemap == 5 && !trapping) {
         if (interval == 1000) {
             if (coolGuy.y <= 100) {
@@ -311,6 +555,117 @@ function makeTraps(interval: Number) {
             //animation.stopAnimation(animation.AnimationTypes.All, sprite)
             sprite.destroy()
         })
+    }
+    else if (curTilemap == 7 && !trapping) {
+        if(interval == 1000) {
+            if(intervalCounter) {
+                intervalCounter = false
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(0, 2))
+                sawProj.setVelocity(75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(0, 7))
+                sawProj.setVelocity(75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(11, 3))
+                sawProj.setVelocity(-75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(11, 8))
+                sawProj.setVelocity(-75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+            } else {
+                intervalCounter = true
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(0, 3))
+                sawProj.setVelocity(75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(0, 8))
+                sawProj.setVelocity(75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(11, 2))
+                sawProj.setVelocity(-75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+                sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+                tiles.placeOnTile(sawProj, tiles.getTileLocation(11, 7))
+                sawProj.setVelocity(-75, 0)
+                animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+                sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+                sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+            }
+        } else if(interval == 2000) {
+            sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+            tiles.placeOnTile(sawProj, tiles.getTileLocation(2, 1))
+            sawProj.setVelocity(0, 50)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+            sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+            tiles.placeOnTile(sawProj, tiles.getTileLocation(9, 1))
+            sawProj.setVelocity(0, 50)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+            sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+            tiles.placeOnTile(sawProj, tiles.getTileLocation(2, 9))
+            sawProj.setVelocity(0, -50)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+            sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+            tiles.placeOnTile(sawProj, tiles.getTileLocation(9, 9))
+            sawProj.setVelocity(0, -50)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+        }
+        scene.onOverlapTile(SpriteKind.TrapProjectile, assets.tile`treeMiddleTile`, function (sprite, location) {
+            sprite.destroy()
+        })
+    }
+    else if (curTilemap == 8 && !trapping) {
+        if(interval == 1000) {
+            sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+            tiles.placeOnTile(sawProj, tiles.getTileLocation(14, 4))
+            sawProj.setVelocity(-100, 0)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+
+            sawProj = sprites.create(assets.image`sawblade1`, SpriteKind.TrapProjectile)
+            tiles.placeOnTile(sawProj, tiles.getTileLocation(14, 12))
+            sawProj.setVelocity(-100, 0)
+            animation.runImageAnimation(sawProj, assets.animation`sawBladeAnim`, 250, true)
+            sawProj.setFlag(SpriteFlag.GhostThroughWalls, true)
+            sawProj.setFlag(SpriteFlag.AutoDestroy, true)
+        }
     }
 }
 
@@ -439,7 +794,6 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function tilemapTransitions() {
-    counter1++
     if (curTilemap == 1) {
         tileMap1Transitions()
     }
@@ -454,6 +808,18 @@ function tilemapTransitions() {
     }
     if (curTilemap == 5) {
         tileMap5Transitions()
+    }
+    if (curTilemap == 6) {
+        tileMap6Transitions()
+    }
+    if (curTilemap == 7) {
+        tileMap7Transitions()
+    }
+    if (curTilemap == 8) {
+        tileMap8Transitions()
+    }
+    if (curTilemap == 9) {
+        tileMap9Transitions()
     }
 }
 function tileMap1Transitions() {
@@ -603,8 +969,6 @@ function tileMap4Transitions() {
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
             sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
-            //need to create a default state of the box being on the button when completed (done)
-            // add counters to find mem leak (done)
             enemiesSlain = 0
             makeEnemy()
             sprites.destroyAllSpritesOfKind(SpriteKind.Box)
@@ -629,13 +993,13 @@ function tileMap5Transitions() {
             makeEnemy()
         }
     })
-    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass1`, function (sprite, location) {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileDarkGrass3`, function (sprite, location) {
         if(curTilemap == 5 && location.row == 15) {
             checkEnemiesAlive()
             info.stopCountdown()
             tiles.setCurrentTilemap(tilemap`ForestLevel6`)
             curTilemap = 6
-            coolGuy.setPosition(192, 30)
+            coolGuy.setPosition(184, 30)
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
             sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
@@ -646,14 +1010,169 @@ function tileMap5Transitions() {
         }
     })
 }
+function tileMap6Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`blueToGreenGrass`, function (sprite, location) {
+        if(curTilemap == 6 && location.row == 0) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel5`)
+            curTilemap = 5
+            coolGuy.setPosition(184, 230)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
+        if (curTilemap == 6 && location.col == 15) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel7`)
+            curTilemap = 7
+            coolGuy.setPosition(30, 88)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+}
+function tileMap7Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
+        if (curTilemap == 7 && location.col == 0) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel6`)
+            curTilemap = 6
+            coolGuy.setPosition(230, 136)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+            sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
+        if (curTilemap == 7 && location.col == 11) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel8`)
+            curTilemap = 8
+            coolGuy.setPosition(30, 140)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+            sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+}
+function tileMap8Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
+        if (curTilemap == 8 && location.col == 0) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel7`)
+            curTilemap = 7
+            coolGuy.setPosition(162, 88)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+            sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
+        if (curTilemap == 8 && location.row == 0) {
+            checkEnemiesAlive()
+            if(boxReachedEnd) {
+                tiles.setCurrentTilemap(tilemap`ForestLevel9Unlocked`)
+            } else {
+                tiles.setCurrentTilemap(tilemap`ForestLevel9Locked`)
+            }
+            curTilemap = 9
+            coolGuy.setPosition(88, 146)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+            sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+}
+function tileMap9Transitions() {
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
+        if (curTilemap == 9 && location.row == 10) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel8`)
+            curTilemap = 8
+            coolGuy.setPosition(136, 30)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`BossGateLeft`, function (sprite, location) {
+        if (curTilemap == 9 && boxReachedEnd) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevelBoss`)
+            curTilemap = 10
+            coolGuy.setPosition(88, 146)
+            scene.setBackgroundImage(assets.image`forest1`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`BossGateUnlocked`, function (sprite, location) {
+        if (curTilemap == 9 && boxReachedEnd) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevelBoss`)
+            curTilemap = 10
+            coolGuy.setPosition(88, 146)
+            scene.setBackgroundImage(assets.image`forest1`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`BossGateRight`, function (sprite, location) {
+        if (curTilemap == 9 && boxReachedEnd) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevelBoss`)
+            curTilemap = 10
+            coolGuy.setPosition(88, 146)
+            scene.setBackgroundImage(assets.image`forest1`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            enemiesSlain = 0
+            makeEnemy()
+        }
+    })
+}
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (enemyVulnerable) {
         if(otherSprite == enemyTaco || otherSprite == enemyBurger) {
             enemyHealth.value += -1
-        } else if(otherSprite == enemyTaco2) {
+        } else if (otherSprite == enemyTaco2 || otherSprite == enemyBurger2) {
             enemyHealth2.value += -1
-        } else if(otherSprite == enemyTaco3) {
+        } else if (otherSprite == enemyTaco3 || otherSprite == enemyBurger3) {
             enemyHealth3.value += -1
+        } else if (otherSprite == enemyTaco4 || otherSprite == enemyBurger4) {
+            enemyHealth4.value += -1
+        }
+        if(otherSprite == bossPizza) {
+            bossHealth.value += -1
         }
         enemyVulnerable = false
         timer.after(500, function () {
@@ -662,38 +1181,86 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSp
     }
     if (enemyHealth.value == 0 && (otherSprite == enemyTaco || otherSprite == enemyBurger)) {
         otherSprite.destroy()
-    } 
-    if(curTilemap == 4) {
+    } else
+    if(curTilemap == 2) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyTaco2) {
+            otherSprite.destroy()
+        }
+    } else if(curTilemap == 4) {
         if (enemyHealth2.value == 0 && otherSprite == enemyTaco2) {
             otherSprite.destroy()
         } else if (enemyHealth3.value == 0 && otherSprite == enemyTaco3) {
             otherSprite.destroy()
         }
-    } else if(curTilemap == 2) {
-        if (enemyHealth2.value == 0 && otherSprite == enemyTaco2) {
+    } else if (curTilemap == 6) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyBurger2) {
             otherSprite.destroy()
+        } else if (enemyHealth3.value == 0 && otherSprite == enemyTaco3) {
+            otherSprite.destroy()
+        } else if (enemyHealth4.value == 0 && otherSprite == enemyTaco4) {
+            otherSprite.destroy()
+        }
+    } else if (curTilemap == 8) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyBurger2) {
+            otherSprite.destroy()
+        } else if (enemyHealth3.value == 0 && otherSprite == enemyTaco3) {
+            otherSprite.destroy()
+        }
+    } else if (curTilemap == 10) {
+        if (bossHealth.value == 0) {
+            endGame()
         }
     }
 })
 sprites.onOverlap(SpriteKind.TrapProjectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (enemyVulnerable) {
-        enemyHealth.value += -1
+        if(otherSprite == enemyTaco || otherSprite == enemyBurger) {
+            enemyHealth.value += -1
+        } else if (otherSprite == enemyTaco2 || otherSprite == enemyBurger2) {
+            enemyHealth2.value += -1
+        } else if (otherSprite == enemyTaco3 || otherSprite == enemyBurger3) {
+            enemyHealth3.value += -1
+        } else if (otherSprite == enemyTaco4 || otherSprite == enemyBurger4) {
+            enemyHealth4.value += -1
+        }
         enemyVulnerable = false
         timer.after(500, function () {
             enemyVulnerable = true
         })
     }
-    if (enemyHealth.value == 0) {
+    if (enemyHealth.value == 0 && (otherSprite == enemyTaco || otherSprite == enemyBurger)) {
         otherSprite.destroy()
+    } else
+    if(curTilemap == 2) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyTaco2) {
+            otherSprite.destroy()
+        }
+    } else if(curTilemap == 4) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyTaco2) {
+            otherSprite.destroy()
+        } else if (enemyHealth3.value == 0 && otherSprite == enemyTaco3) {
+            otherSprite.destroy()
+        }
+    } else if (curTilemap == 6) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyBurger2) {
+            otherSprite.destroy()
+        } else if (enemyHealth3.value == 0 && otherSprite == enemyTaco3) {
+            otherSprite.destroy()
+        } else if (enemyHealth4.value == 0 && otherSprite == enemyTaco4) {
+            otherSprite.destroy()
+        }
+    } else if (curTilemap == 8) {
+        if (enemyHealth2.value == 0 && otherSprite == enemyBurger2) {
+            otherSprite.destroy()
+        } else if (enemyHealth3.value == 0 && otherSprite == enemyTaco3) {
+            otherSprite.destroy()
+        }
     }
 })
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, box) {
     if(!boxReachedEnd && !boxMoving) {
         boxMoving = true
-        //woodBox.destroy()
-        //woodBox = sprites.create(assets.image`woodBox`, SpriteKind.Box)
         box.z = 1
-        //box.setPosition(120, 200)
         if (isSwingRight) {
             tiles.placeOnTile(box, tiles.getTileLocation(curLocationX + 1, curLocationY))
         } else if (isSwingLeft) {
@@ -715,11 +1282,6 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, box) {
     }
     
 })
-// sprites.onCreated(SpriteKind.Box, function(sprite) {
-//     if (sprites.allOfKind(SpriteKind.Box).length >= 4) {
-//         sprite.destroy()
-//     }
-// })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.EnemyProjectile, function (sprite, otherSprite) {
     if (guyVulnerable) {
         info.player1.setLife(info.life() - 1)
@@ -739,7 +1301,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Key, function (sprite, otherSpri
 })
 sprites.onOverlap(SpriteKind.Weapon, SpriteKind.TrapProjectile, function (sprite, otherSprite) {
     if(isSwingRight) {
-        otherSprite.setVelocity(75,0)
+        otherSprite.setVelocity(75, 0)
     } else if(isSwingLeft) {
         otherSprite.setVelocity(-75, 0)
     } else if(isSwingUp) {
@@ -761,6 +1323,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.TrapProjectile, function (sprite
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (guyVulnerable) {
+        music.play(music.createSoundEffect(WaveShape.Square, 200, 1, 255, 0, 100, SoundExpressionEffect.Vibrato, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
         info.player1.setLife(info.life() - 1)
         guyVulnerable = false
         timer.after(1000, function () {
@@ -808,13 +1371,25 @@ let guyWalk: animation.Animation
 let swordGuyWalk: animation.Animation
 let enemyBurger: Sprite
 let enemyBurger2: Sprite
+let enemyBurger3: Sprite
+let enemyBurger4: Sprite
 let enemyTaco: Sprite
 let enemyTaco2: Sprite
 let enemyTaco3: Sprite
+let enemyTaco4: Sprite
 let enemyHealth: StatusBarSprite
 let enemyHealth2: StatusBarSprite
 let enemyHealth3: StatusBarSprite
 let enemyHealth4: StatusBarSprite
+let bossPizza: Sprite
+let bossHealth: StatusBarSprite
+let halfHealth = false
+let dashing = false
+let bossIsStunned = false
+let justUsedOrbs = false
+let shootingOrbs = false
+let bossVx: number
+let bossVy: number
 let tacoTarget: Sprite
 let keySprite: Sprite
 let guyVulnerable = true
@@ -826,7 +1401,7 @@ let isSwingDown = false
 let isSwingLeft = false
 let isSwingRight = false
 let trapping = false
-let boxReachedEnd = false
+let boxReachedEnd = true
 let enemiesLeft1 = true
 let enemiesLeft2 = true
 let enemiesLeft3 = true
@@ -834,31 +1409,29 @@ let enemiesLeft4 = true
 let enemiesLeft5 = true
 let enemiesLeft6 = true
 let enemiesLeft8 = true
+let notFollowing1 = true
 let notFollowing5 = true
+let notFollowing6 = true
 let boxMoving = false
 let tacoAlive = false
 let hasKey = false
 let curTilemap = 1
 let enemiesSlain = 0
 let numEnemies: Number
+let intervalCounter = false
 
 let curLocationX = 0 
 let curLocationY = 0
 
-let counter1 = 0
-let counter2 = 0
-let counter3 = 0
-let counter4 = 0
-let counter5 = 0
 
 makeSprites()
 makeEnemy()
 makeGuyAnimations()
 coolGuy.setPosition(20, 92)
-controller.moveSprite(coolGuy, 100, 100)
+controller.moveSprite(coolGuy, 65, 65)
 scene.setBackgroundImage(assets.image`forest1`)
 scene.cameraFollowSprite(coolGuy)
-info.setLife(3)
+info.setLife(10)
 tiles.setCurrentTilemap(tilemap`ForestLevel1`)
 game.onUpdate(function () {
     rightSword.setPosition(coolGuy.x + 10, coolGuy.y)
@@ -869,35 +1442,40 @@ game.onUpdate(function () {
     if (!(moving)) {
         animation.stopAnimation(animation.AnimationTypes.All, coolGuy)
     }
-    if (coolGuy.y >= 100 && curTilemap == 5 && notFollowing5) {
+    if(coolGuy.x >= 100 && curTilemap == 1 && notFollowing1) {
+        enemyBurger.follow(coolGuy, 25)
+        notFollowing1 = false
+    } else if(coolGuy.y >= 100 && curTilemap == 5 && notFollowing5) {
         enemyBurger.follow(coolGuy, 25)
         notFollowing5 = false
+    } else if(coolGuy.y >= 100 && curTilemap == 6 && notFollowing6) {
+        enemyBurger.follow(coolGuy, 25)
+        enemyBurger2.follow(coolGuy, 25)
+        notFollowing6 = false
     }
-    // 
-    // if (sprites.allOfKind(SpriteKind.Box).length == 3) {
-    //     if (woodBox.x == boxFollower.x && woodBox.y == boxFollower.y) {
-    //         boxReachedEnd = true
-    //         boxFollower.destroy()
-    //     }
-    // }
+    if(curTilemap == 10 && bossHealth.value < bossHealth.max / 2 && !halfHealth) {
+        halfHealth = true
+    }
     
 })
+game.onUpdateInterval(250, function() {
+    if (curTilemap == 10) {
+        updateBoss()
+    }
+})
 game.onUpdateInterval(2000, function () {
-    if(curTilemap == 5) {
+    if(curTilemap == 5 || curTilemap == 7 || curTilemap == 8) {
         makeTraps(2000)
     }
-    if(curTilemap == 2 || curTilemap == 4) {
+    if(curTilemap == 2 || curTilemap == 4 || curTilemap == 6 || curTilemap == 8) {
         updateEnemies()
     }
 })
 game.onUpdateInterval(1000, function () {
-    if (coolGuy.y <= 32 || coolGuy.y >= 224 || coolGuy.x <= 32 || coolGuy.x >= 224) {
+    if (curTilemap != 10) {
         tilemapTransitions()
     }
-    if(curTilemap == 5) {
+    if (curTilemap == 5 || curTilemap == 7 || curTilemap == 8) {
         makeTraps(1000)
     }
 })
-// game.onUpdateInterval(5000, function () {
-//     control.heapSnapshot()
-// })

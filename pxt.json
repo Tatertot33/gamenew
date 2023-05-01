@@ -1,5 +1,5 @@
 {
-    "name": "The Legend of Cool Guy - Copy - Copy - Copy",
+    "name": "The Legend of Cool Guy - Copy - Copy - Copy - Copy",
     "description": "",
     "dependencies": {
         "device": "*",
@@ -9,7 +9,8 @@
         "arcade-tile-util": "github:microsoft/arcade-tile-util#v1.0.1",
         "darts": "*",
         "seesaw": "github:adafruit/pxt-seesaw#v0.0.19",
-        "sprite-scaling": "*"
+        "sprite-scaling": "*",
+        "arcade-story": "github:microsoft/arcade-storytelling#v1.0.3"
     },
     "files": [
         "main.blocks",
