@@ -57,7 +57,7 @@ function makeEnemy() {
 
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger.setPosition(200, 150)
-            enemyBurger.follow(coolGuy, 25)
+            enemyBurger.follow(coolGuy, 20)
             enemyBurger.z = 3
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth.attachToSprite(enemyBurger)
@@ -156,7 +156,7 @@ function makeEnemy() {
             numEnemies = 3
             enemyBurger = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger.z = 3
-            enemyBurger.follow(coolGuy, 25)
+            enemyBurger.follow(coolGuy, 20)
             tiles.placeOnTile(enemyBurger, tiles.getTileLocation(8, 4))
             enemyHealth = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth.attachToSprite(enemyBurger)
@@ -166,7 +166,7 @@ function makeEnemy() {
 
             enemyBurger2 = sprites.create(assets.image`smallBurger`, SpriteKind.Enemy)
             enemyBurger2.z = 3
-            enemyBurger2.follow(coolGuy, 25)
+            enemyBurger2.follow(coolGuy, 20)
             tiles.placeOnTile(enemyBurger2, tiles.getTileLocation(8, 12))
             enemyHealth2 = statusbars.create(20, 4, StatusBarKind.Health)
             enemyHealth2.attachToSprite(enemyBurger2)
@@ -342,8 +342,11 @@ function endGame() {
     sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
     guyVulnerable = false
     bossPizza.setImage(assets.image`bossPizzaDead`)
-    story.printDialog("Congratulations! You beat the Evil Pizza!", 80, 90, 50, 150)
-    game.gameOver(true)
+    timer.after(500, function() {
+        scene.setBackgroundImage(assets.image`forestWinScreen`)
+        story.printDialog("Congratulations! You beat the Evil Pizza and got your Cheese back!", 80, 90, 50, 150)
+        game.gameOver(true)
+    })
 }
 function updateEnemies() {
     if(curTilemap == 2 && enemiesLeft2) {
@@ -689,109 +692,124 @@ function makeGuyAnimations() {
     animation.attachAnimation(coolGuy, guyWalk)
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (controller.A.isPressed()) {
-        if (controller.left.isPressed()) {
-            slowMovement()
-            swinging = true
-            isSwingLeft = true
-            animation.setAction(coolGuy, ActionKind.NormalWalking)
-            animation.runImageAnimation(
-                leftSword,
-                assets.animation`SliceLeft`,
-                50,
-                false
-            )
-            pause(200)
-            leftSword.destroy()
-            leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-            animation.setAction(coolGuy, ActionKind.SwordWalking)
-            swinging = false
-            isSwingLeft = false
-            regMovement()
-        } else if (controller.right.isPressed()) {
-            slowMovement()
-            swinging = true
-            isSwingRight = true
-            animation.setAction(coolGuy, ActionKind.NormalWalking)
-            animation.runImageAnimation(
-                rightSword,
-                assets.animation`SliceRight`,
-                50,
-                false
-            )
-            pause(200)
-            rightSword.destroy()
-            rightSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-            animation.setAction(coolGuy, ActionKind.SwordWalking)
-            swinging = false
-            isSwingRight = false
-            regMovement()
-        } else if (controller.down.isPressed()) {
-            slowMovement()
-            swinging = true
-            isSwingDown = true
-            animation.setAction(coolGuy, ActionKind.NormalWalking)
-            animation.runImageAnimation(
-                downSword,
-                assets.animation`SliceDown`,
-                50,
-                false
-            )
-            pause(200)
-            downSword.destroy()
-            downSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-            animation.setAction(coolGuy, ActionKind.SwordWalking)
-            swinging = false
-            isSwingDown = false
-            regMovement()
-        } else if (controller.up.isPressed()) {
-            slowMovement()
-            swinging = true
-            isSwingUp = true
-            animation.setAction(coolGuy, ActionKind.NormalWalking)
-            animation.runImageAnimation(
-                upSword,
-                assets.animation`SliceUp`,
-                50,
-                false
-            )
-            pause(200)
-            upSword.destroy()
-            upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
-            animation.setAction(coolGuy, ActionKind.SwordWalking)
-            swinging = false
-            isSwingUp = false
-            regMovement()
+    if (gameStarted) {
+        if (controller.A.isPressed()) {
+            if (controller.left.isPressed()) {
+                slowMovement()
+                swinging = true
+                isSwingLeft = true
+                animation.setAction(coolGuy, ActionKind.NormalWalking)
+                animation.runImageAnimation(
+                    leftSword,
+                    assets.animation`SliceLeft`,
+                    50,
+                    false
+                )
+                pause(200)
+                leftSword.destroy()
+                leftSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+                animation.setAction(coolGuy, ActionKind.SwordWalking)
+                swinging = false
+                isSwingLeft = false
+                regMovement()
+            } else if (controller.right.isPressed()) {
+                slowMovement()
+                swinging = true
+                isSwingRight = true
+                animation.setAction(coolGuy, ActionKind.NormalWalking)
+                animation.runImageAnimation(
+                    rightSword,
+                    assets.animation`SliceRight`,
+                    50,
+                    false
+                )
+                pause(200)
+                rightSword.destroy()
+                rightSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+                animation.setAction(coolGuy, ActionKind.SwordWalking)
+                swinging = false
+                isSwingRight = false
+                regMovement()
+            } else if (controller.down.isPressed()) {
+                slowMovement()
+                swinging = true
+                isSwingDown = true
+                animation.setAction(coolGuy, ActionKind.NormalWalking)
+                animation.runImageAnimation(
+                    downSword,
+                    assets.animation`SliceDown`,
+                    50,
+                    false
+                )
+                pause(200)
+                downSword.destroy()
+                downSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+                animation.setAction(coolGuy, ActionKind.SwordWalking)
+                swinging = false
+                isSwingDown = false
+                regMovement()
+            } else if (controller.up.isPressed()) {
+                slowMovement()
+                swinging = true
+                isSwingUp = true
+                animation.setAction(coolGuy, ActionKind.NormalWalking)
+                animation.runImageAnimation(
+                    upSword,
+                    assets.animation`SliceUp`,
+                    50,
+                    false
+                )
+                pause(200)
+                upSword.destroy()
+                upSword = sprites.create(assets.image`nothing`, SpriteKind.Weapon)
+                animation.setAction(coolGuy, ActionKind.SwordWalking)
+                swinging = false
+                isSwingUp = false
+                regMovement()
+            }
+            pause(150)
         }
-        pause(150)
     }
 })
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    if(gameStarted) {
+        if (!(swinging)) {
+            animation.setAction(coolGuy, ActionKind.SwordWalking)
+        } else {
+            animation.setAction(coolGuy, ActionKind.NormalWalking)
+        }
     }
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    if(gameStarted) {
+        if (!(swinging)) {
+            animation.setAction(coolGuy, ActionKind.SwordWalking)
+        } else {
+            animation.setAction(coolGuy, ActionKind.NormalWalking)
+        }
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    if(gameStarted) {
+        if (!(swinging)) {
+            animation.setAction(coolGuy, ActionKind.SwordWalking)
+        } else {
+            animation.setAction(coolGuy, ActionKind.NormalWalking)
+        }
     }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(swinging)) {
-        animation.setAction(coolGuy, ActionKind.SwordWalking)
-    } else {
-        animation.setAction(coolGuy, ActionKind.NormalWalking)
+    if(gameStarted) {
+        if (!(swinging)) {
+            animation.setAction(coolGuy, ActionKind.SwordWalking)
+        } else {
+            animation.setAction(coolGuy, ActionKind.NormalWalking)
+        }
+    }
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if(!gameStarted) {
+        story.clearAllText()
     }
 })
 function tilemapTransitions() {
@@ -1356,7 +1374,7 @@ function noMovement() {
     controller.moveSprite(coolGuy, 0, 0)
 }
 
-
+let gameStarted = false
 let coolGuy: Sprite
 let upSword: Sprite
 let downSword: Sprite
@@ -1424,59 +1442,82 @@ let intervalCounter = false
 let curLocationX = 0 
 let curLocationY = 0
 
+story.startCutscene(function () {
+    // story.cancelSpriteMovement(coolGuy)
+    scene.setBackgroundImage(assets.image`forest1`)
+    story.printDialog("The Legend of Cool Guy", 80, 90, 50, 150)
+    story.printDialog("One day Evil Pizza took your cheese", 80, 90, 50, 150)
+    story.printDialog("You have reason to believe he is somewhere in this forest", 80, 90, 50, 150)
+    story.printDialog("Objective: Kill Evil Pizza, Find your cheese.", 80, 90, 50, 150)
+    story.printDialog("Choose A Mode To Play", 80, 90, 50, 150)
+    // story.page("The Legend of Cool Guy", "", "You have reason to believe he is somewhere in this forest", "Objective: Kill Evil Pizza, Find your cheese.", "Choose A Mode To Play")
+    story.showPlayerChoices("Classic Mode", "Infinite Lives Mode")
+    if (story.getLastAnswer() == "Classic Mode") {
+        info.setLife(10)
+    } else {
+        info.setLife(100)
+    }
+    makeSprites()
+    makeEnemy()
+    makeGuyAnimations()
+    coolGuy.setPosition(20, 92)
+    controller.moveSprite(coolGuy, 65, 65)
+    scene.setBackgroundImage(assets.image`forest1`)
+    scene.cameraFollowSprite(coolGuy)
+    tiles.setCurrentTilemap(tilemap`ForestLevel1`)
+    gameStarted = true
+})
 
-makeSprites()
-makeEnemy()
-makeGuyAnimations()
-coolGuy.setPosition(20, 92)
-controller.moveSprite(coolGuy, 65, 65)
-scene.setBackgroundImage(assets.image`forest1`)
-scene.cameraFollowSprite(coolGuy)
-info.setLife(10)
-tiles.setCurrentTilemap(tilemap`ForestLevel1`)
 game.onUpdate(function () {
-    rightSword.setPosition(coolGuy.x + 10, coolGuy.y)
-    upSword.setPosition(coolGuy.x, coolGuy.y - 12)
-    downSword.setPosition(coolGuy.x, coolGuy.y + 12)
-    leftSword.setPosition(coolGuy.x - 10, coolGuy.y)
-    moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
-    if (!(moving)) {
-        animation.stopAnimation(animation.AnimationTypes.All, coolGuy)
+    if(gameStarted) {
+        rightSword.setPosition(coolGuy.x + 10, coolGuy.y)
+        upSword.setPosition(coolGuy.x, coolGuy.y - 12)
+        downSword.setPosition(coolGuy.x, coolGuy.y + 12)
+        leftSword.setPosition(coolGuy.x - 10, coolGuy.y)
+        moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
+        if (!(moving)) {
+            animation.stopAnimation(animation.AnimationTypes.All, coolGuy)
+        }
+        if (coolGuy.x >= 100 && curTilemap == 1 && notFollowing1) {
+            enemyBurger.follow(coolGuy, 20)
+            notFollowing1 = false
+        } else if (coolGuy.y >= 100 && curTilemap == 5 && notFollowing5) {
+            enemyBurger.follow(coolGuy, 20)
+            notFollowing5 = false
+        } else if (coolGuy.y >= 100 && curTilemap == 6 && notFollowing6) {
+            enemyBurger.follow(coolGuy, 20)
+            enemyBurger2.follow(coolGuy, 20)
+            notFollowing6 = false
+        }
+        if (curTilemap == 10 && bossHealth.value < bossHealth.max / 2 && !halfHealth) {
+            halfHealth = true
+        }
     }
-    if(coolGuy.x >= 100 && curTilemap == 1 && notFollowing1) {
-        enemyBurger.follow(coolGuy, 25)
-        notFollowing1 = false
-    } else if(coolGuy.y >= 100 && curTilemap == 5 && notFollowing5) {
-        enemyBurger.follow(coolGuy, 25)
-        notFollowing5 = false
-    } else if(coolGuy.y >= 100 && curTilemap == 6 && notFollowing6) {
-        enemyBurger.follow(coolGuy, 25)
-        enemyBurger2.follow(coolGuy, 25)
-        notFollowing6 = false
-    }
-    if(curTilemap == 10 && bossHealth.value < bossHealth.max / 2 && !halfHealth) {
-        halfHealth = true
-    }
-    
 })
 game.onUpdateInterval(250, function() {
-    if (curTilemap == 10) {
-        updateBoss()
+    if (gameStarted) {
+        if (curTilemap == 10) {
+            updateBoss()
+        }
     }
 })
 game.onUpdateInterval(2000, function () {
-    if(curTilemap == 5 || curTilemap == 7 || curTilemap == 8) {
-        makeTraps(2000)
-    }
-    if(curTilemap == 2 || curTilemap == 4 || curTilemap == 6 || curTilemap == 8) {
-        updateEnemies()
+    if (gameStarted) {
+        if (curTilemap == 5 || curTilemap == 7 || curTilemap == 8) {
+            makeTraps(2000)
+        }
+        if (curTilemap == 2 || curTilemap == 4 || curTilemap == 6 || curTilemap == 8) {
+            updateEnemies()
+        }
     }
 })
 game.onUpdateInterval(1000, function () {
-    if (curTilemap != 10) {
-        tilemapTransitions()
-    }
-    if (curTilemap == 5 || curTilemap == 7 || curTilemap == 8) {
-        makeTraps(1000)
+    if (gameStarted) {
+        if (curTilemap != 10) {
+            tilemapTransitions()
+        }
+        if (curTilemap == 5 || curTilemap == 7 || curTilemap == 8) {
+            makeTraps(1000)
+        }
     }
 })
