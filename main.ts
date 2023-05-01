@@ -17,6 +17,7 @@ enum SpriteKind {
     Box,
     Button,
     Key,
+    Obstacle,
     Misc
 }
 
@@ -353,9 +354,16 @@ function endGame() {
     let cheese = sprites.create(assets.image`cheese`, SpriteKind.Trap)
     cheese.setPosition(136, 96)
     cheese.z = 5
-    scene.setBackgroundImage(assets.image`forestWinScreen`)
-    story.printDialog("Congratulations! You beat the Evil Pizza and got your Cheese back!", 80, 90, 50, 150)
-    game.gameOver(true)
+    timer.after(500, function() {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Player)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Trap)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Weapon)
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+        tiles.setCurrentTilemap(tilemap`endTilemap`)
+        scene.setBackgroundImage(assets.image`forestWinScreen`)
+        story.printDialog("Congratulations! You beat the Evil Pizza and got your Cheese back!", 90, 105, 50, 150)
+        game.gameOver(true)
+    })
 }
 function updateEnemies() {
     if(curTilemap == 2 && enemiesLeft2) {
@@ -1035,6 +1043,10 @@ function tileMap5Transitions() {
             sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
             enemiesSlain = 0
             makeEnemy()
+            if(!rockIsDestroyed) {
+                let rock = sprites.create(assets.image`crackedRock`, SpriteKind.Obstacle)
+                rock.
+            }
         }
     })
 }
@@ -1359,6 +1371,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         })
     }
 })
+sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Obstacle, function (sprite, otherSprite) {
+    music.play(music.createSoundEffect(WaveShape.Square, 200, 1, 255, 0, 250, SoundExpressionEffect.Vibrato, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
+    otherSprite.destroy()
+    rockIsDestroyed = true
+})
 info.onCountdownEnd(function () {
     info.changeLifeBy(-1)
     if(info.life() != 0) {
@@ -1432,6 +1449,7 @@ let isSwingLeft = false
 let isSwingRight = false
 let trapping = false
 let boxReachedEnd = false
+let rockIsDestroyed = false
 let enemiesLeft1 = true
 let enemiesLeft2 = true
 let enemiesLeft3 = true
@@ -1454,14 +1472,12 @@ let curLocationX = 0
 let curLocationY = 0
 
 story.startCutscene(function () {
-    // story.cancelSpriteMovement(coolGuy)
     scene.setBackgroundImage(assets.image`forest1`)
-    story.printDialog("The Legend of Cool Guy", 80, 90, 50, 150)
-    story.printDialog("One day Evil Pizza took your cheese", 80, 90, 50, 150)
-    story.printDialog("You have reason to believe he is somewhere in this forest", 80, 90, 50, 150)
-    story.printDialog("Objective: Kill Evil Pizza, Find your cheese.", 80, 90, 50, 150)
-    story.printDialog("Choose A Mode To Play", 80, 90, 50, 150)
-    // story.page("The Legend of Cool Guy", "", "You have reason to believe he is somewhere in this forest", "Objective: Kill Evil Pizza, Find your cheese.", "Choose A Mode To Play")
+    story.printDialog("The Legend of Cool Guy", 84, 100, 50, 150)
+    story.printDialog("One day Evil Pizza took your cheese", 82, 100, 50, 150)
+    story.printDialog("You have reason to believe he is somewhere in this forest", 98, 100, 50, 150)
+    story.printDialog("Objective: Kill Evil Pizza, Find your cheese.", 90, 100, 50, 150)
+    story.printDialog("Choose A Mode To Play", 88, 100, 50, 150)
     story.showPlayerChoices("Classic Mode", "Infinite Lives Mode")
     if (story.getLastAnswer() == "Classic Mode") {
         info.setLife(10)

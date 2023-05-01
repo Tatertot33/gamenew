@@ -1838,6 +1838,25 @@ dddddddddddd66666dddfffffdddd95555559999dfffffdddddd66666dddddfffffdd99999999999
 6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
 6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
 `;
+            case "image57":
+            case "crackedRock":return img`
+. . e e c c f b b b b b e e . . 
+. e b b c f f b b b b b b b e . 
+e b b b c f b b b b b b b b b e 
+b b b b c f b b b b b f f f f b 
+b b b b c c f b b f f c c c f f 
+b b b b c f f f f c c b b c c c 
+b b b b f c c c c f b b b b b b 
+c c c c c f c b c f f b b b b b 
+f f f f f f c b b c c f f f f f 
+f b b b b e e e b b c c c c c c 
+e e b e e e e b b b e e b b b e 
+f b e e b b e b b b e e e e e b 
+f e e e b b e e e f f b b e b f 
+. f b b e f f e f e e f e e e . 
+. . f e e e e f f e e f f f . . 
+. . . f f e f f f f f f f . . . 
+`;
         }
         return null;
     })

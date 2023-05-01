@@ -284,6 +284,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "forestWinScreen"
     },
+    "image57": {
+        "data": "hwQQABAAAAAAvrvL//4PAOC7u8u/vv4Avru7y7/rvg++u7vLv+6+/szMzM+/vuv+/P/8/O++++7/u//M7O7+/ru7+7zru+7/u7v7zLu7/v+7u8//vLvv/ru7z/vM7u/+u/u8u8/u+/+++7y7z+vr/777zLvP6+4P4PvPu8/r6wAAvs+7z74PAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "crackedRock"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",
