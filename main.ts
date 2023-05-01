@@ -340,6 +340,7 @@ function updateBoss() {
 }
 function endGame() {
     sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+    guyVulnerable = false
     bossPizza.setImage(assets.image`bossPizzaDead`)
     story.printDialog("Congratulations! You beat the Evil Pizza!", 80, 90, 50, 150)
     game.gameOver(true)
@@ -1175,7 +1176,7 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Enemy, function (sprite, otherSp
             bossHealth.value += -1
         }
         enemyVulnerable = false
-        timer.after(500, function () {
+        timer.after(400, function () {
             enemyVulnerable = true
         })
     }
@@ -1401,7 +1402,7 @@ let isSwingDown = false
 let isSwingLeft = false
 let isSwingRight = false
 let trapping = false
-let boxReachedEnd = true
+let boxReachedEnd = false
 let enemiesLeft1 = true
 let enemiesLeft2 = true
 let enemiesLeft3 = true
