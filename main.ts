@@ -224,6 +224,9 @@ function updateBoss() {
                 } else {
                     bossPizza.setImage(assets.image`bossPizzaAngry`)
                 }
+                if(gameEnding) {
+                    bossPizza.setImage(assets.image`bossPizzaDead`)
+                }
                 timer.after(500, function() {
                     bossIsStunned = false
                 })
@@ -256,6 +259,9 @@ function updateBoss() {
                     bossIsStunned = false
                     justUsedOrbs = false
                 })
+                if(gameEnding) {
+                    bossPizza.setImage(assets.image`bossPizzaDead`)
+                }
             })
         }
         else if (!justUsedOrbs && !shootingOrbs) {
@@ -339,14 +345,17 @@ function updateBoss() {
     }
 }
 function endGame() {
+    gameEnding = true
     sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
     guyVulnerable = false
+    gameStarted = false
     bossPizza.setImage(assets.image`bossPizzaDead`)
-    timer.after(500, function() {
-        scene.setBackgroundImage(assets.image`forestWinScreen`)
-        story.printDialog("Congratulations! You beat the Evil Pizza and got your Cheese back!", 80, 90, 50, 150)
-        game.gameOver(true)
-    })
+    let cheese = sprites.create(assets.image`cheese`, SpriteKind.Trap)
+    cheese.setPosition(136, 96)
+    cheese.z = 5
+    scene.setBackgroundImage(assets.image`forestWinScreen`)
+    story.printDialog("Congratulations! You beat the Evil Pizza and got your Cheese back!", 80, 90, 50, 150)
+    game.gameOver(true)
 }
 function updateEnemies() {
     if(curTilemap == 2 && enemiesLeft2) {
@@ -1375,6 +1384,8 @@ function noMovement() {
 }
 
 let gameStarted = false
+let gameEnding = false
+let startedBoss = false
 let coolGuy: Sprite
 let upSword: Sprite
 let downSword: Sprite
@@ -1496,8 +1507,13 @@ game.onUpdate(function () {
 })
 game.onUpdateInterval(250, function() {
     if (gameStarted) {
-        if (curTilemap == 10) {
+        if (curTilemap == 10 && startedBoss) {
             updateBoss()
+        } else if(curTilemap == 10 && !startedBoss) {
+            timer.after(1000, function() {
+                startedBoss = true
+                updateBoss()
+            })
         }
     }
 })
