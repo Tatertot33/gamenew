@@ -1,13 +1,11 @@
 {
-    "name": "The Legend of Cool Guy Complete",
+    "name": "The Legend of Cool Guy",
     "description": "",
     "dependencies": {
         "device": "*",
         "animation": "*",
         "Timers": "github:microsoft/arcade-timers#v1.1.0",
         "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.2",
-        "arcade-tile-util": "github:microsoft/arcade-tile-util#v1.0.1",
-        "darts": "*",
         "seesaw": "github:adafruit/pxt-seesaw#v0.0.19",
         "sprite-scaling": "*",
         "arcade-story": "github:microsoft/arcade-storytelling#v1.0.3"
