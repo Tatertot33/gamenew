@@ -1857,6 +1857,42 @@ f e e e b b e e e f f b b e b f
 . . f e e e e f f e e f f f . . 
 . . . f f e f f f f f f f . . . 
 `;
+            case "image58":
+            case "blackBackground":return img`
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+f f f f f f f f f f f f f f f f 
+`;
+            case "image59":
+            case "heartImage":return img`
+. f f f f f f . f f f f f f . 
+f f 2 2 2 2 f f f 2 2 2 2 f f 
+f 2 2 2 2 2 2 f 2 2 2 1 2 2 f 
+f 2 2 2 2 2 2 2 2 2 1 1 1 2 f 
+f 2 2 2 2 2 2 2 2 2 2 1 2 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+f f 2 2 2 2 2 2 2 2 2 2 2 f f 
+. f f 2 2 2 2 2 2 2 2 2 f f . 
+. . f f 2 2 2 2 2 2 2 f f . . 
+. . . f f 2 2 2 2 2 f f . . . 
+. . . . f f 2 2 2 f f . . . . 
+. . . . . f f 2 f f . . . . . 
+. . . . . . f f f . . . . . . 
+`;
         }
         return null;
     })

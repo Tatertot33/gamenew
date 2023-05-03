@@ -289,6 +289,16 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "crackedRock"
     },
+    "image58": {
+        "data": "hwQQABAAAAD//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////w==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "blackBackground"
+    },
+    "image59": {
+        "data": "hwQPAA4AAADw////AAAAAP8iIvIPAAAALyIiIv8AAAAvIiIi8g8AAC8iIiIi/wAALyIiIiLyDwD/IiIiIiL/APAvIiIiIvIA/yIiIiIi/wAvIiIiIvIPAC8SIiIi/wAALxEhIvIPAAAvEiIi/wAAAP8iIvIPAAAA8P///wAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "heartImage"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",

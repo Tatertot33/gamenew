@@ -1045,7 +1045,13 @@ function tileMap5Transitions() {
             makeEnemy()
             if(!rockIsDestroyed) {
                 let rock = sprites.create(assets.image`crackedRock`, SpriteKind.Obstacle)
-                rock.
+                tiles.placeOnTile(rock, tiles.getTileLocation(0, 13))
+            } else {
+                tiles.setWallAt(tiles.getTileLocation(0, 13), false)
+            }
+            if(!heartTaken) {
+                let heart = sprites.create(assets.image`heartImage`, SpriteKind.Food)
+                tiles.placeOnTile(heart, tiles.getTileLocation(3, 2))
             }
         }
     })
@@ -1060,8 +1066,62 @@ function tileMap6Transitions() {
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
             sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Obstacle)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Food)
             enemiesSlain = 0
             makeEnemy()
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`smallRocks`, function (sprite, location) {
+        if(curTilemap == 6 && location.col == 0 && rockIsDestroyed) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel6b`)
+            coolGuy.setPosition(232, 216)
+            scene.setBackgroundImage(assets.image`blackBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+            enemiesSlain = 0
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`green`, function (sprite, location) {
+        if (curTilemap == 6 && location.col == 15 && location.row == 13 && rockIsDestroyed) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel6`)
+            coolGuy.setPosition(32, 216)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            enemiesSlain = 0
+            makeEnemy()
+            if (!heartTaken) {
+                let heart = sprites.create(assets.image`heartImage`, SpriteKind.Food)
+                tiles.placeOnTile(heart, tiles.getTileLocation(3, 2))
+            }
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`rockTile`, function (sprite, location) {
+        if (curTilemap == 6 && location.col == 15 && rockIsDestroyed) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel6`)
+            coolGuy.setPosition(32, 40)
+            scene.setBackgroundImage(assets.image`greenBackground`)
+            enemiesSlain = 0
+            makeEnemy()
+            if (!heartTaken) {
+                let heart = sprites.create(assets.image`heartImage`, SpriteKind.Food)
+                tiles.placeOnTile(heart, tiles.getTileLocation(3, 2))
+            }
+        }
+    })
+    scene.onOverlapTile(SpriteKind.Player, assets.tile`rockTile2`, function (sprite, location) {
+        if (curTilemap == 6 && location.col == 0 && rockIsDestroyed) {
+            checkEnemiesAlive()
+            tiles.setCurrentTilemap(tilemap`ForestLevel6b`)
+            coolGuy.setPosition(232, 40)
+            scene.setBackgroundImage(assets.image`blackBackground`)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+            enemiesSlain = 0
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
@@ -1073,6 +1133,8 @@ function tileMap6Transitions() {
             scene.setBackgroundImage(assets.image`greenBackground`)
             sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
             sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Obstacle)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Food)
             enemiesSlain = 0
             makeEnemy()
         }
@@ -1092,6 +1154,16 @@ function tileMap7Transitions() {
             sprites.destroyAllSpritesOfKind(SpriteKind.TrapProjectile)
             enemiesSlain = 0
             makeEnemy()
+            if (!rockIsDestroyed) {
+                let rock = sprites.create(assets.image`crackedRock`, SpriteKind.Obstacle)
+                tiles.placeOnTile(rock, tiles.getTileLocation(0, 13))
+            } else {
+                tiles.setWallAt(tiles.getTileLocation(0, 13), false)
+            }
+            if (!heartTaken) {
+                let heart = sprites.create(assets.image`heartImage`, SpriteKind.Food)
+                tiles.placeOnTile(heart, tiles.getTileLocation(3, 2))
+            }
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`greenTile`, function (sprite, location) {
@@ -1375,6 +1447,12 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Obstacle, function (sprite, othe
     music.play(music.createSoundEffect(WaveShape.Square, 200, 1, 255, 0, 250, SoundExpressionEffect.Vibrato, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
     otherSprite.destroy()
     rockIsDestroyed = true
+    tiles.setWallAt(tiles.getTileLocation(0, 13), false)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    otherSprite.destroy()
+    heartTaken = true
+    info.setLife(info.life() + 3)
 })
 info.onCountdownEnd(function () {
     info.changeLifeBy(-1)
@@ -1450,6 +1528,7 @@ let isSwingRight = false
 let trapping = false
 let boxReachedEnd = false
 let rockIsDestroyed = false
+let heartTaken = false
 let enemiesLeft1 = true
 let enemiesLeft2 = true
 let enemiesLeft3 = true
@@ -1488,7 +1567,7 @@ story.startCutscene(function () {
     makeEnemy()
     makeGuyAnimations()
     coolGuy.setPosition(20, 92)
-    controller.moveSprite(coolGuy, 65, 65)
+    controller.moveSprite(coolGuy, 100, 100)
     scene.setBackgroundImage(assets.image`forest1`)
     scene.cameraFollowSprite(coolGuy)
     tiles.setCurrentTilemap(tilemap`ForestLevel1`)
