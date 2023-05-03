@@ -1082,6 +1082,8 @@ function tileMap6Transitions() {
             sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             sprites.destroyAllSpritesOfKind(SpriteKind.Food)
             enemiesSlain = 0
+            enemyHealth3.value = 0
+            enemyHealth4.value = 0
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`green`, function (sprite, location) {
@@ -1122,6 +1124,8 @@ function tileMap6Transitions() {
             sprites.destroyAllSpritesOfKind(SpriteKind.EnemyProjectile)
             sprites.destroyAllSpritesOfKind(SpriteKind.Food)
             enemiesSlain = 0
+            enemyHealth3.value = 0
+            enemyHealth4.value = 0
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`tileGrass2`, function (sprite, location) {
