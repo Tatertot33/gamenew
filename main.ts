@@ -1098,6 +1098,7 @@ function tileMap6Transitions() {
                 let heart = sprites.create(assets.image`heartImage`, SpriteKind.Food)
                 tiles.placeOnTile(heart, tiles.getTileLocation(3, 2))
             }
+            tiles.setWallAt(tiles.getTileLocation(0, 13), false)
         }
     })
     scene.onOverlapTile(SpriteKind.Player, assets.tile`rockTile`, function (sprite, location) {
@@ -1400,7 +1401,7 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Box, function (sprite, box) {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.EnemyProjectile, function (sprite, otherSprite) {
     if (guyVulnerable) {
-        info.player1.setLife(info.life() - 1)
+        info.changeLifeBy(-1)
         guyVulnerable = false
         timer.after(1000, function () {
             guyVulnerable = true
@@ -1455,8 +1456,10 @@ sprites.onOverlap(SpriteKind.Weapon, SpriteKind.Obstacle, function (sprite, othe
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     otherSprite.destroy()
-    heartTaken = true
-    info.setLife(info.life() + 3)
+    if(!heartTaken) {
+        info.changeLifeBy(3)
+        heartTaken = true
+    }
 })
 info.onCountdownEnd(function () {
     info.changeLifeBy(-1)
@@ -1551,6 +1554,8 @@ let enemiesSlain = 0
 let numEnemies: Number
 let intervalCounter = false
 
+let poweredUp = false
+
 let curLocationX = 0 
 let curLocationY = 0
 
@@ -1621,6 +1626,10 @@ game.onUpdateInterval(2000, function () {
         if (curTilemap == 5 || curTilemap == 7 || curTilemap == 8) {
             makeTraps(2000)
         }
+    }
+})
+game.onUpdateInterval(2500, function () {
+    if (gameStarted) {
         if (curTilemap == 2 || curTilemap == 4 || curTilemap == 6 || curTilemap == 8) {
             updateEnemies()
         }
